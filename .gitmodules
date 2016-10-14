@@ -1,0 +1,3 @@
+[submodule "piglow"]
+	path = piglow
+	url = https://github.com/Boeeerb/PiGlow.git
