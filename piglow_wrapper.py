@@ -26,7 +26,9 @@ class PiGlowWrapper(object):
 
 def get():
     try:
-        from piglow.piglow import PiGlow
+        import sys
+        sys.path.append("piglow")
+        from piglow import PiGlow
         return PiGlowWrapper(PiGlow())
     except Exception as ex:
         logging.warning(ex)
