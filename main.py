@@ -42,6 +42,7 @@ def _init_piglow():
     global piglow
     try:
         piglow = piglow_wrapper.get()
+        print("piglow")
     except Exception as ex:
         logging.warning(ex)
 
@@ -56,7 +57,7 @@ def _shutdown():
 
 
 if __name__ == '__main__':
-    logging.basicConfig()
+    logging.basicConfig(level=logging.INFO)
     _initialize()
     scheduler = BlockingScheduler()
 
