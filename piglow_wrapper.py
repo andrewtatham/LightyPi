@@ -2,11 +2,29 @@ import datetime
 import time
 import logging
 
+hour_mapping = {
+
+    1: 10,
+    2: 9,
+    3: 8,
+    4: 7,
+
+    5: 16,
+    6: 15,
+    7: 14,
+    8: 13,
+
+    9: 4,
+    10: 3,
+    11: 2,
+    12: 1
+}
+
 
 class PiGlowWrapper(object):
     def __init__(self, pg):
         self._piglow = pg
-        self.on = 1
+        self.on = 2
         self._init()
         self.every_hour()
         self.every_minute()
@@ -19,12 +37,17 @@ class PiGlowWrapper(object):
             time.sleep(1)
 
     def every_hour(self):
+
         hour = datetime.datetime.now().hour % 12
+        if hour == 0:
+            hour = 12
+        on_led = hour_mapping[hour]
         for led in range(18):
-            if led <= hour:
-                self._piglow.led(led + 1, self.on)
+            piglow_led = led + 1
+            if piglow_led == on_led:
+                self._piglow.led(piglow_led, self.on)
             else:
-                self._piglow.led(led + 1, 0)
+                self._piglow.led(piglow_led, 0)
 
     def every_minute(self):
         pass

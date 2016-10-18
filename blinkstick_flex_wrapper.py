@@ -1,9 +1,6 @@
 import datetime
-import time
 import random
-
 from blinkstick import blinkstick
-
 import colorsys
 
 
@@ -53,20 +50,11 @@ class BlinkstickFlexWrapper(blinkstick.BlinkStickPro):
         month = now.month
         minute = now.minute
         hour = now.hour
-        leds = int(minute / 2)
-
+        led = int(minute / 2)
         h = (month / 12.0 + hour / 24.0 + minute / 60.0) % 1.0
-        h_alt = (h + 0.5) % 1.0
-
         rgb = hsv_to_rgb(h, self.s, self.v)
-        rgb_alt = hsv_to_rgb(h_alt, self.s, self.v)
-
         self.clear()
-        for led in range(leds):
-            if led % 2 == 0:
-                self.set_color(0, 1 + led, rgb[0], rgb[1], rgb[2])
-            else:
-                self.set_color(0, 1 + led, rgb_alt[0], rgb_alt[1], rgb_alt[2])
+        self.set_color(0, 1 + led, rgb[0], rgb[1], rgb[2])
         self.send_data_all()
 
 
