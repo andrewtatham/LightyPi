@@ -44,6 +44,9 @@ class BlinkstickFlexWrapper(blinkstick.BlinkStickPro):
                         self.set_color(0, index, rgb_alt[0], rgb_alt[1], rgb_alt[2])
                 self.send_data_all()
 
+        self.clear()
+        self.send_data_all()
+
     def every_minute(self, now=None):
         if not now:
             now = datetime.datetime.now()

@@ -62,7 +62,7 @@ if __name__ == '__main__':
     scheduler = BlockingScheduler()
 
     on_the_hour = CronTrigger(minute=0)
-    on_the_minute = CronTrigger(second=0)
+    on_the_minute = CronTrigger(minute="1-59", second=0)
 
     if piglow:
         scheduler.add_job(func=piglow.every_hour, trigger=on_the_hour)
