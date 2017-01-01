@@ -23,8 +23,8 @@ hour_mapping = {
 class PiGlowWrapper(object):
     def __init__(self, pg):
         self._piglow = pg
-        self.on = 2
-        self.off = 0
+        self._on = 2
+        self._off = 0
         self._init()
         self.every_hour()
         self.every_minute()
@@ -32,7 +32,7 @@ class PiGlowWrapper(object):
 
     def _init(self):
         for _ in range(2):
-            self._piglow.all(self.on)
+            self._piglow.all(self._on)
             time.sleep(1)
             self._piglow.all(0)
             time.sleep(1)
@@ -46,7 +46,7 @@ class PiGlowWrapper(object):
         for led in range(18):
             piglow_led = led + 1
             if piglow_led == on_led:
-                self._piglow.led(piglow_led, self.on)
+                self._piglow.led(piglow_led, self._on)
             else:
                 self._piglow.led(piglow_led, 0)
 
@@ -60,9 +60,9 @@ class PiGlowWrapper(object):
 
         state = train_result.FuckingTrainStateDescription
         if self.previous_state and state != self.previous_state:
-            self._set_train_state_lights(self.previous_state, self.off)
+            self._set_train_state_lights(self.previous_state, self._off)
         if not self.previous_state or state != self.previous_state:
-            self._set_train_state_lights(state, self.on)
+            self._set_train_state_lights(state, self._on)
         self.previous_state = state
 
     def _set_train_state_lights(self, state, value):
