@@ -20,14 +20,15 @@ hour_mapping = {
     12: 1
 }
 
-
 class PiGlowWrapper(object):
     def __init__(self, pg):
         self._piglow = pg
         self.on = 2
+        self.off = 0
         self._init()
         self.every_hour()
         self.every_minute()
+        self.previous_state = None
 
     def _init(self):
         for _ in range(2):
@@ -54,6 +55,31 @@ class PiGlowWrapper(object):
 
     def off(self):
         self._piglow.all(0)
+
+    def is_my_fucking_train_on_time(self, train_result):
+
+        state = train_result.FuckingTrainStateDescription
+        if self.previous_state and state != self.previous_state:
+            self._set_train_state_lights(self.previous_state, self.off)
+        if not self.previous_state or state != self.previous_state:
+            self._set_train_state_lights(state, self.on)
+        self.previous_state = state
+
+    def _set_train_state_lights(self, state, value):
+        if state == "IDontFuckingKnow":
+            self._piglow.blue(value)
+        elif state == "OnFuckingTimeApparently":
+            self._piglow.green(value)
+        elif state == "FuckingDelayed":
+            self._piglow.yellow(value)
+        elif state == "FuckingCancelled":
+            self._piglow.red(value)
+        elif state == "YouNeedAFuckingCrystalBall":
+            self._piglow.blue(value)
+        elif state == "TheFuckingServiceIsDownOrSomething":
+            self._piglow.blue(value)
+        elif state == "NoFuckingTrains":
+            self._piglow.red(value)
 
 
 def get():

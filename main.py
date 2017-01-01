@@ -3,9 +3,9 @@ import platform
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
-from apscheduler.triggers.interval import IntervalTrigger
 from blinkstick import blinkstick
 
+import fucking_trains
 import piglow_wrapper
 from blinkstick_flex_wrapper import BlinkstickFlexWrapper
 from blinkstick_nano_wrapper import BlinkstickNanoWrapper
@@ -56,6 +56,12 @@ def _shutdown():
         piglow.off()
 
 
+def is_my_fucking_train_on_time():
+    response = fucking_trains.is_my_fucking_train_on_time()
+    if piglow:
+        piglow.is_my_fucking_train_on_time(response)
+
+
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     _initialize()
@@ -73,6 +79,9 @@ if __name__ == '__main__':
     if blinkstick_nano:
         scheduler.add_job(func=blinkstick_nano.every_hour, trigger=on_the_hour)
         scheduler.add_job(func=blinkstick_nano.every_minute, trigger=on_the_minute)
+    if piglow:
+        scheduler.add_job(func=is_my_fucking_train_on_time, trigger=on_the_minute)
+
     try:
         scheduler.start()
     except KeyboardInterrupt:
