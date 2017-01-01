@@ -62,6 +62,11 @@ def is_my_fucking_train_on_time():
         piglow.is_my_fucking_train_on_time(response)
 
 
+def trains_off():
+    if piglow:
+        piglow.trains_off()
+
+
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     _initialize()
@@ -69,6 +74,12 @@ if __name__ == '__main__':
 
     on_the_hour = CronTrigger(minute=0)
     on_the_minute = CronTrigger(minute="1-59", second=0)
+
+    morning_commute_6 = CronTrigger(hour=6, minute="20-59/5", day_of_week="MON-FRI")
+    morning_commute_7 = CronTrigger(hour=7, minute="0-40/5", day_of_week="MON-FRI")
+    evening_commute = CronTrigger(hour=16, minute="0-38/5", day_of_week="MON-FRI")
+    morning_commute_off = CronTrigger(hour=7, minute=42, day_of_week="MON-FRI")
+    evening_commute_off = CronTrigger(hour=16, minute=40, day_of_week="MON-FRI")
 
     if piglow:
         scheduler.add_job(func=piglow.every_hour, trigger=on_the_hour)
@@ -80,7 +91,11 @@ if __name__ == '__main__':
         scheduler.add_job(func=blinkstick_nano.every_hour, trigger=on_the_hour)
         scheduler.add_job(func=blinkstick_nano.every_minute, trigger=on_the_minute)
     if piglow:
-        scheduler.add_job(func=is_my_fucking_train_on_time, trigger=on_the_minute)
+        scheduler.add_job(func=is_my_fucking_train_on_time, trigger=morning_commute_6)
+        scheduler.add_job(func=is_my_fucking_train_on_time, trigger=morning_commute_7)
+        scheduler.add_job(func=is_my_fucking_train_on_time, trigger=evening_commute)
+        scheduler.add_job(func=trains_off, trigger=morning_commute_off)
+        scheduler.add_job(func=trains_off, trigger=evening_commute_off)
 
     try:
         scheduler.start()
