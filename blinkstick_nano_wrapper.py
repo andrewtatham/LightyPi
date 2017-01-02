@@ -58,9 +58,8 @@ class BlinkstickNanoWrapper(blinkstick.BlinkStickPro):
 
 if __name__ == '__main__':
     bs = BlinkstickNanoWrapper()
-
     bs.every_hour()
     for _ in range(60):
         bs.every_minute()
-
     bs.every_hour()
+    bs.off()
