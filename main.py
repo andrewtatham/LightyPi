@@ -5,7 +5,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 from blinkstick import blinkstick
 
-import fucking_trains
+import train_check
 import piglow_wrapper
 from blinkstick_flex_wrapper import BlinkstickFlexWrapper
 from blinkstick_nano_wrapper import BlinkstickNanoWrapper
@@ -57,9 +57,9 @@ def _shutdown():
 
 
 def is_my_fucking_train_on_time():
-    response = fucking_trains.is_my_fucking_train_on_time()
+    response = train_check.is_my_fucking_train_on_time()
     if piglow:
-        piglow.is_my_fucking_train_on_time(response)
+        piglow.is_my_train_on_time(response)
 
 
 def trains_off():

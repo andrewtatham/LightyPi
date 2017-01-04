@@ -56,7 +56,7 @@ class PiGlowWrapper(object):
     def off(self):
         self._piglow.all(0)
 
-    def is_my_fucking_train_on_time(self, train_result):
+    def is_my_train_on_time(self, train_result):
         state = train_result.FuckingTrainStateDescription
         if self.previous_state and state != self.previous_state:
             self._set_train_state_lights(self.previous_state, self._off)
@@ -70,19 +70,19 @@ class PiGlowWrapper(object):
         self.previous_state = None
 
     def _set_train_state_lights(self, state, value):
-        if state == "IDontFuckingKnow":
+        if state == "Unknown":
             self._piglow.blue(value)
-        elif state == "OnFuckingTimeApparently":
+        elif state == "OnTime":
             self._piglow.green(value)
-        elif state == "FuckingDelayed":
+        elif state == "Delayed":
             self._piglow.yellow(value)
-        elif state == "FuckingCancelled":
+        elif state == "Cancelled":
             self._piglow.red(value)
-        elif state == "YouNeedAFuckingCrystalBall":
+        elif state == "TooFarAhead":
             self._piglow.blue(value)
-        elif state == "TheFuckingServiceIsDownOrSomething":
+        elif state == "ServiceDown":
             self._piglow.blue(value)
-        elif state == "NoFuckingTrains":
+        elif state == "NoTrains":
             self._piglow.red(value)
 
 

@@ -3,14 +3,14 @@ import pprint
 
 import requests
 
-prod = "http://fuckingtrains.azurewebsites.net/api/FuckingTrains/IsMyFuckingTrainOnTime"
+prod = "http://andrewtathamtraincheck.azurewebsites.net/api/traincheck/ismytreainontime"
 url = prod
 
 
 class TrainResult(object):
     def __init__(self, response):
         self._response = json.loads(response.text)
-        self.FuckingTrainStateDescription = self._response["FuckingTrainStateDescription"]
+        self.TrainState = self._response["TrainStateDescription"]
 
     def __str__(self):
         return pprint.pformat(self._response)
