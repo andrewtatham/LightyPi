@@ -3,8 +3,9 @@ import pprint
 
 import requests
 
-prod = "http://andrewtathamtraincheck.azurewebsites.net/api/traincheck/ismytreainontime"
-url = prod
+url = "http://andrewtathamtraincheck.azurewebsites.net/api/traincheck/ismytreainontime"
+# url = "http://localhost:53322/api/TrainCheck/IsMyTrainOnTime"
+
 
 
 class TrainResult(object):
