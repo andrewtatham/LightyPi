@@ -19,6 +19,7 @@ class TrainResult(object):
 
 def is_my_fucking_train_on_time():
     response = requests.get(url)
+    print(json.loads(response.text))
     result = TrainResult(response)
     print(result)
     return result
