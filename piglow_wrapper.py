@@ -57,7 +57,7 @@ class PiGlowWrapper(object):
         self._piglow.all(0)
 
     def is_my_train_on_time(self, train_result):
-        state = train_result.FuckingTrainStateDescription
+        state = train_result.TrainState
         if self.previous_state and state != self.previous_state:
             self._set_train_state_lights(self.previous_state, self._off)
         if not self.previous_state or state != self.previous_state:
