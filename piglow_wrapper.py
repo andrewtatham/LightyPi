@@ -2,7 +2,7 @@ import datetime
 import time
 import logging
 
-hour_mapping = {
+led_mapping = {
 
     1: 10,
     2: 9,
@@ -20,15 +20,18 @@ hour_mapping = {
     12: 1
 }
 
+
 class PiGlowWrapper(object):
-    def __init__(self, pg):
-        self._piglow = pg
+    def __init__(self, piglow):
+        self._piglow = piglow
         self._on = 2
         self._off = 0
-        self._init()
-        self.every_hour()
-        self.every_minute()
+        self.prev_hour_led = None
+        self.prev_minute_led = None
         self.previous_state = None
+
+        self._init()
+        self.update_time()
 
     def _init(self):
         for _ in range(2):
@@ -37,21 +40,34 @@ class PiGlowWrapper(object):
             self._piglow.all(0)
             time.sleep(1)
 
-    def every_hour(self):
+    def update_time(self, now=None):
+        if not now:
+            now = datetime.datetime.now()
 
-        hour = datetime.datetime.now().hour % 12
+        hour = now.hour % 12
         if hour == 0:
             hour = 12
-        on_led = hour_mapping[hour]
-        for led in range(18):
-            piglow_led = led + 1
-            if piglow_led == on_led:
-                self._piglow.led(piglow_led, self._on)
-            else:
-                self._piglow.led(piglow_led, 0)
+        minute = int(now.minute / 5) + 1
+
+        hour_led = led_mapping[hour]
+        minute_led = led_mapping[minute]
+
+        if self.prev_hour_led and self.prev_hour_led != hour_led:
+            self._piglow.led(self.prev_hour_led, self._off)
+        if self.prev_minute_led and self.prev_minute_led != minute_led:
+            self._piglow.led(self.prev_minute_led, self._off)
+
+        self._piglow.led(hour_led, self._on)
+        self._piglow.led(minute_led, self._on)
+
+        self.prev_hour_led = hour_led
+        self.prev_minute_led = minute_led
+
+    def every_hour(self):
+        self.update_time()
 
     def every_minute(self):
-        pass
+        self.update_time()
 
     def off(self):
         self._piglow.all(0)
@@ -63,11 +79,13 @@ class PiGlowWrapper(object):
         if not self.previous_state or state != self.previous_state:
             self._set_train_state_lights(state, self._on)
         self.previous_state = state
+        self.update_time()
 
     def trains_off(self):
         if self.previous_state:
             self._set_train_state_lights(self.previous_state, self._off)
         self.previous_state = None
+        self.update_time()
 
     def _set_train_state_lights(self, state, value):
         if state == "Unknown":
