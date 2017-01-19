@@ -4,28 +4,32 @@ import logging
 
 led_mapping = {
 
-    1: 10,
-    2: 9,
-    3: 8,
-    4: 7,
+    0: 10,
+    1: 9,
+    2: 8,
+    3: 7,
 
-    5: 16,
-    6: 15,
-    7: 14,
-    8: 13,
+    4: 16,
+    5: 15,
+    6: 14,
+    7: 13,
 
-    9: 4,
-    10: 3,
-    11: 2,
-    12: 1
+    8: 4,
+    9: 3,
+    10: 2,
+    11: 1
 }
 
 
 class PiGlowWrapper(object):
     def __init__(self, piglow):
         self._piglow = piglow
+
+        self._alt = False
         self._on = 2
+        self._alt_on = 3
         self._off = 0
+
         self.prev_hour_led = None
         self.prev_minute_led = None
         self.previous_state = None
@@ -37,7 +41,7 @@ class PiGlowWrapper(object):
         for _ in range(2):
             self._piglow.all(self._on)
             time.sleep(1)
-            self._piglow.all(0)
+            self._piglow.all(self._off)
             time.sleep(1)
 
     def update_time(self, now=None):
@@ -45,9 +49,7 @@ class PiGlowWrapper(object):
             now = datetime.datetime.now()
 
         hour = now.hour % 12
-        if hour == 0:
-            hour = 12
-        minute = int(now.minute / 5) + 1
+        minute = int(now.minute / 5)
 
         hour_led = led_mapping[hour]
         minute_led = led_mapping[minute]
@@ -57,16 +59,21 @@ class PiGlowWrapper(object):
         if self.prev_minute_led and self.prev_minute_led != minute_led:
             self._piglow.led(self.prev_minute_led, self._off)
 
+
         self._piglow.led(hour_led, self._on)
-        self._piglow.led(minute_led, self._on)
+
+        if self._alt:
+            flashy = self._alt_on
+        else:
+            flashy = self._on
+
+        self._piglow.led(minute_led, flashy)
 
         self.prev_hour_led = hour_led
         self.prev_minute_led = minute_led
 
-    def every_hour(self):
-        self.update_time()
-
-    def every_minute(self):
+    def every_second(self):
+        self._alt = not self._alt
         self.update_time()
 
     def off(self):
