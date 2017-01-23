@@ -19,9 +19,15 @@ is_linux = _platform.startswith('Linux')
 
 
 def _initialize():
+    _init_logging()
     _init_blinksticks()
     if is_linux:
         _init_piglow()
+
+
+def _init_logging():
+    logging.basicConfig(level=logging.INFO)
+    logging.getLogger("apscheduler.scheduler").addFilter(lambda record: False)
 
 
 def _init_blinksticks():
@@ -68,7 +74,6 @@ def trains_off():
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
     _initialize()
     scheduler = BlockingScheduler()
 
@@ -76,7 +81,7 @@ if __name__ == '__main__':
     on_the_minute = CronTrigger(minute="1-59", second=0)
     every_second = CronTrigger(second="*")
 
-    morning_commute_6 = CronTrigger(hour=6, minute="20/5", day_of_week="MON-FRI")
+    morning_commute_6 = CronTrigger(hour=6, minute="20-59/5", day_of_week="MON-FRI")
     morning_commute_7 = CronTrigger(hour=7, minute="0-40/5", day_of_week="MON-FRI")
     evening_commute = CronTrigger(hour=16, minute="0-38/5", day_of_week="MON-FRI")
     morning_commute_off = CronTrigger(hour=7, minute=42, day_of_week="MON-FRI")
@@ -98,6 +103,7 @@ if __name__ == '__main__':
         scheduler.add_job(func=trains_off, trigger=evening_commute_off)
 
     try:
+        scheduler.print_jobs()
         scheduler.start()
     except KeyboardInterrupt:
         scheduler.shutdown()
