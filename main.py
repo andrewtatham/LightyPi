@@ -10,6 +10,12 @@ import piglow_wrapper
 from blinkstick_flex_wrapper import BlinkstickFlexWrapper
 from blinkstick_nano_wrapper import BlinkstickNanoWrapper
 
+
+class MuteFilter(object):
+    def filter(self, record):
+        return False
+
+
 blinkstick_nano = None
 blinkstick_flex = None
 piglow = None
@@ -27,7 +33,7 @@ def _initialize():
 
 def _init_logging():
     logging.basicConfig(level=logging.INFO)
-    logging.getLogger("apscheduler.scheduler").addFilter(lambda record: False)
+    logging.getLogger("apscheduler.scheduler").addFilter(MuteFilter())
 
 
 def _init_blinksticks():
