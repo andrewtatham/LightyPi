@@ -48,8 +48,8 @@ class PiGlowWrapper(object):
         if not now:
             now = datetime.datetime.now()
 
-        hour = now.hour % 12
-        minute = int(now.minute / 5)
+        hour = (now.hour + 11) % 12
+        minute = int(((now.minute + 55) % 60) / 5)
 
         hour_led = led_mapping[hour]
         minute_led = led_mapping[minute]
