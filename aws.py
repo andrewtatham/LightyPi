@@ -71,4 +71,4 @@ class AwsClient(object):
         self.myAWSIoTMQTTClient.subscribe(topic, 1, callback)
 
     def publish(self, topic, message):
-        self.myAWSIoTMQTTClient.publish(topic, message)
+        self.myAWSIoTMQTTClient.publish(topic, message, 1)
