@@ -1,3 +1,4 @@
+import datetime
 import logging
 import platform
 
@@ -7,6 +8,7 @@ from blinkstick import blinkstick
 
 import train_check
 import piglow_wrapper
+from aws import AwsClient
 from blinkstick_flex_wrapper import BlinkstickFlexWrapper
 from blinkstick_nano_wrapper import BlinkstickNanoWrapper
 
@@ -79,7 +81,25 @@ def trains_off():
         piglow.trains_off()
 
 
+# Custom MQTT message callback
+def customCallback(client, userdata, message):
+    print("Received a new message: ")
+    print(message.payload)
+    print("from topic: ")
+    print(message.topic)
+    print("--------------\n\n")
+
+
+aws = AwsClient()
+
+
+def publish():
+    aws.publish("foo/bar", datetime.datetime.now().strftime("%x"))
+
+
 if __name__ == '__main__':
+
+    trackCommute = False
     _initialize()
     scheduler = BlockingScheduler()
 
@@ -101,7 +121,7 @@ if __name__ == '__main__':
     if blinkstick_nano:
         scheduler.add_job(func=blinkstick_nano.every_hour, trigger=on_the_hour)
         scheduler.add_job(func=blinkstick_nano.every_minute, trigger=on_the_minute)
-    if piglow:
+    if piglow and trackCommute:
         scheduler.add_job(func=is_my_fucking_train_on_time, trigger=morning_commute_6)
         scheduler.add_job(func=is_my_fucking_train_on_time, trigger=morning_commute_7)
         scheduler.add_job(func=is_my_fucking_train_on_time, trigger=evening_commute)
@@ -109,8 +129,14 @@ if __name__ == '__main__':
         scheduler.add_job(func=trains_off, trigger=evening_commute_off)
 
     try:
+        aws.subscribe("iotbutton/G030PT020186PK4G", customCallback)
+        aws.subscribe("foo/bar", customCallback)
+
+        scheduler.add_job(publish, on_the_minute)
+
         scheduler.print_jobs()
         scheduler.start()
+
     except KeyboardInterrupt:
         scheduler.shutdown()
     finally:
