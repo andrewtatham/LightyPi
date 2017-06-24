@@ -130,9 +130,9 @@ if __name__ == '__main__':
 
     try:
         aws.subscribe("iotbutton/G030PT020186PK4G", customCallback)
-        aws.subscribe("foo/bar", customCallback)
+        # aws.subscribe("foo/bar", customCallback)
 
-        scheduler.add_job(publish, on_the_minute)
+        # scheduler.add_job(publish, on_the_minute)
 
         scheduler.print_jobs()
         scheduler.start()
