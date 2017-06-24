@@ -7,7 +7,6 @@ url = "http://andrewtathamtraincheck.azurewebsites.net/api/traincheck/ismytreain
 # url = "http://localhost:53322/api/TrainCheck/IsMyTrainOnTime"
 
 
-
 class TrainResult(object):
     def __init__(self, response):
         self._response = json.loads(response.text)
