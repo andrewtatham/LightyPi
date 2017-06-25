@@ -88,6 +88,8 @@ def customCallback(client, userdata, message):
     print("from topic: ")
     print(message.topic)
     print("--------------\n\n")
+    if blinkstick_flex:
+        blinkstick_flex.rainbow()
 
 
 aws = AwsClient()

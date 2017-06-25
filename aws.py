@@ -40,7 +40,7 @@ class AwsClient(object):
 
         # Configure logging
         logger = logging.getLogger("AWSIoTPythonSDK.core")
-        logger.setLevel(logging.DEBUG)
+        logger.setLevel(logging.WARN)
         streamHandler = logging.StreamHandler()
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         streamHandler.setFormatter(formatter)
