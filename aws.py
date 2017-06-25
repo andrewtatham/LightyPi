@@ -72,3 +72,13 @@ class AwsClient(object):
 
     def publish(self, topic, message):
         self.myAWSIoTMQTTClient.publish(topic, message, 1)
+
+
+class AwsIotButtonEvent(object):
+    def __init__(self, payload):
+        self.click_type = payload["clickType"]
+        self.battery_voltage = payload["batteryVoltage"]
+        self.serial_number = payload["serialNumber"]
+        self.is_single = self.click_type == "SINGLE"
+        self.is_long = self.click_type == "LONG"
+        self.is_double = self.click_type == "DOUBLE"

@@ -8,9 +8,11 @@ from blinkstick import blinkstick
 
 import train_check
 import piglow_wrapper
-from aws import AwsClient
+from aws import AwsClient, AwsIotButtonEvent
 from blinkstick_flex_wrapper import BlinkstickFlexWrapper
 from blinkstick_nano_wrapper import BlinkstickNanoWrapper
+
+BUTTON_TOPIC = "iotbutton/G030PT020186PK4G"
 
 
 class MuteFilter(object):
@@ -88,15 +90,18 @@ def customCallback(client, userdata, message):
     print("from topic: ")
     print(message.topic)
     print("--------------\n\n")
-    if blinkstick_flex:
-        blinkstick_flex.rainbow()
+    if message.topic == BUTTON_TOPIC:
+        event = AwsIotButtonEvent(message.payload)
+        if event.is_single:
+            if blinkstick_flex:
+                blinkstick_flex.rainbow()
 
 
 aws = AwsClient()
 
 
 def publish():
-    aws.publish("foo/bar", datetime.datetime.now().strftime("%x"))
+    aws.publish("foo/bar", datetime.datetime.now().strftime("%X"))
 
 
 if __name__ == '__main__':
@@ -131,7 +136,7 @@ if __name__ == '__main__':
         scheduler.add_job(func=trains_off, trigger=evening_commute_off)
 
     try:
-        aws.subscribe("iotbutton/G030PT020186PK4G", customCallback)
+        aws.subscribe(BUTTON_TOPIC, customCallback)
         # aws.subscribe("foo/bar", customCallback)
 
         # scheduler.add_job(publish, on_the_minute)
