@@ -94,7 +94,7 @@ def customCallback(client, userdata, message):
         event = AwsIotButtonEvent(message.payload)
         if event.is_single:
             if blinkstick_flex:
-                blinkstick_flex.rainbow()
+                blinkstick_flex.hello()
 
 
 aws = AwsClient()

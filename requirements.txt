@@ -2,3 +2,4 @@ requests
 blinkstick
 apscheduler
 AWSIoTPythonSDK
+phue
