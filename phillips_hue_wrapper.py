@@ -15,6 +15,7 @@ def wait():
 
 def on():
     light.on = True
+    wait()
 
 
 def colour_temperature(temp):
@@ -36,8 +37,15 @@ def random_colour():
 
 def hue(hue, sat):
     # hue' parameter has the range 0-65535 so represents approximately 182*degrees
+    # sat is 0-255?
     light.hue = hue
     light.sat = sat
+    wait()
+
+
+def brightness(bright):
+    # // brightness between 0-254 (NB 0 is not off!)
+    light.bri = bright
     wait()
 
 
@@ -46,8 +54,24 @@ def colour_loop():
     wait()
 
 
+def flash_once():
+    light.alert = "select"
+    wait()
+
+
+def flash_multiple():
+    light.alert = "lselect"
+    wait()
+
+
+def flash_off():
+    light.alert = None
+    wait()
+
+
 def off():
     light.on = False
+    wait()
 
 
 if __name__ == '__main__':
@@ -60,14 +84,14 @@ if __name__ == '__main__':
             light = l
         print(text)
 
-    # light.transitiontime = 10  # deciseconds
+    if light.reachable:
+        on()
+        brightness(254)
+        for _ in range(5):
+            random_colour()
 
-    on()
-    for _ in range(5):
-        random_colour()
-
-    colour_temperature(154)
-    colour_temperature(500)
-    colour_temperature(154)
-    colour_loop()
-    off()
+        colour_temperature(154)
+        colour_temperature(500)
+        colour_temperature(154)
+        colour_loop()
+        off()

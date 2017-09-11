@@ -3,3 +3,4 @@ blinkstick
 apscheduler
 AWSIoTPythonSDK
 phue
+paho-mqtt

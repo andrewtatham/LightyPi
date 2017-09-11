@@ -80,6 +80,9 @@ class BlinkstickFlexWrapper(blinkstick.BlinkStickPro):
                 self.set_color(0, led, rgb[0], rgb[1], rgb[2])
             self.send_data_all()
 
+    def push(self, hex):
+        print("TODO PUSh {}" % hex)
+
 
 if __name__ == '__main__':
     bs = BlinkstickFlexWrapper()

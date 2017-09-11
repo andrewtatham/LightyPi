@@ -8,9 +8,10 @@ from blinkstick import blinkstick
 
 import train_check
 import piglow_wrapper
-from aws import AwsClient, AwsIotButtonEvent
+from aws_wrapper import AwsClient, AwsIotButtonEvent
 from blinkstick_flex_wrapper import BlinkstickFlexWrapper
 from blinkstick_nano_wrapper import BlinkstickNanoWrapper
+from cheerlights_wrapper import CheerlightsWrapper
 
 BUTTON_TOPIC = "iotbutton/G030PT020186PK4G"
 
@@ -23,16 +24,21 @@ class MuteFilter(object):
 blinkstick_nano = None
 blinkstick_flex = None
 piglow = None
+aws = None
+cheer = None
 
 _platform = platform.platform()
 is_linux = _platform.startswith('Linux')
 
 
 def _initialize():
+    global aws, cheer
     _init_logging()
     _init_blinksticks()
     if is_linux:
         _init_piglow()
+        aws = AwsClient()
+    cheer = CheerlightsWrapper()
 
 
 def _init_logging():
@@ -97,7 +103,14 @@ def customCallback(client, userdata, message):
                 blinkstick_flex.hello()
 
 
-aws = AwsClient()
+def check_cheerlights():
+    cheer.check()
+
+
+def cheerlights_callback(hex):
+    print("cheerlights {}" % hex)
+    if blinkstick_flex:
+        blinkstick_flex.push(hex)
 
 
 def publish():
@@ -135,11 +148,20 @@ if __name__ == '__main__':
         scheduler.add_job(func=trains_off, trigger=morning_commute_off)
         scheduler.add_job(func=trains_off, trigger=evening_commute_off)
 
-    try:
-        aws.subscribe(BUTTON_TOPIC, customCallback)
-        # aws.subscribe("foo/bar", customCallback)
 
-        # scheduler.add_job(publish, on_the_minute)
+
+    try:
+        if aws:
+            aws.subscribe(BUTTON_TOPIC, customCallback)
+            aws.subscribe("foo/bar", customCallback)
+            scheduler.add_job(publish, on_the_minute)
+        if cheer:
+            scheduler.add_job(func=check_cheerlights, trigger=on_the_minute)
+            cheer.subscribe(cheerlights_callback)
+            if blinkstick_flex:
+                hex_list = cheer.history()
+                for hex in hex_list:
+                    blinkstick_flex.push(hex)
 
         scheduler.print_jobs()
         scheduler.start()
