@@ -1,97 +1,96 @@
 import pprint
 import random
 
-import time
 from phue import Bridge
 
-light_name = "Hue color lamp 1"
-bridge_ip = '192.168.0.20'
-light = None
 
+class HueWrapper(object):
+    def __init__(self, bridge_ip='192.168.0.20', light_name='Hue color lamp 1'):
 
-def wait():
-    time.sleep(1)
+        self.light_name = light_name
+        self.bridge_ip = bridge_ip
+        self.b = None
+        self.light = None
 
+    def connect(self):
+        self.b = Bridge(self.bridge_ip)
+        self.b.connect()
+        for l in self.b.lights:
+            text = l.name
+            if l.name == self.light_name:
+                text += " *"
+                self.light = l
+            print(text)
+        if self.light.reachable:
+            print("connected")
+        pprint.pprint(self.light.__dict__)
 
-def on():
-    light.on = True
-    wait()
+    def on(self):
+        self.light.on = True
 
+    def colour_temperature(self, temp):
+        # (white only) 154 is the coolest, 500 is the warmest
+        self.light.ct = temp
 
-def colour_temperature(temp):
-    # (white only) 154 is the coolest, 500 is the warmest
-    light.ct = temp
-    wait()
+    def xy(self, x, y):
+        #  co-ordinates in CIE 1931 space
+        self.light.xy = (x, y)
 
+    def random_colour(self):
+        self.light.xy = [random.random(), random.random()]
 
-def xy(x, y):
-    #  co-ordinates in CIE 1931 space
-    light.xy = (x, y)
-    wait()
+    def hue(self, hue, sat):
+        # hue' parameter has the range 0-65535 so represents approximately 182*degrees
+        # sat is 0-255?
+        self.light.hue = hue
+        self.light.sat = sat
 
+    def brightness(self, bright):
+        # // brightness between 0-254 (NB 0 is not off!)
+        self.light.bri = bright
 
-def random_colour():
-    light.xy = [random.random(), random.random()]
-    wait()
+    def colour_loop(self):
+        self.light.effect = "colorloop"
 
+    def flash_once(self):
+        self.light.alert = "select"
 
-def hue(hue, sat):
-    # hue' parameter has the range 0-65535 so represents approximately 182*degrees
-    # sat is 0-255?
-    light.hue = hue
-    light.sat = sat
-    wait()
+    def flash_multiple(self):
+        self.light.alert = "lselect"
 
+    def flash_off(self):
+        self.light.alert = None
 
-def brightness(bright):
-    # // brightness between 0-254 (NB 0 is not off!)
-    light.bri = bright
-    wait()
+    def off(self):
+        self.light.on = False
 
+    @property
+    def is_on(self):
+        return self.light.on
 
-def colour_loop():
-    light.effect = "colorloop"
-    wait()
-
-
-def flash_once():
-    light.alert = "select"
-    wait()
-
-
-def flash_multiple():
-    light.alert = "lselect"
-    wait()
-
-
-def flash_off():
-    light.alert = None
-    wait()
-
-
-def off():
-    light.on = False
-    wait()
+    def set_hsv(self, h, s, v):
+        if not self.light.on:
+            self.on()
+        h = int(h * 65535)
+        s = int(s * 255)
+        v = int(v * 255)
+        print((h, s, v))
+        self.light.hue = h
+        self.light.sat = s
+        self.light.bri = v
 
 
 if __name__ == '__main__':
-    b = Bridge(bridge_ip)
-    b.connect()
-    for l in b.lights:
-        text = l.name
-        if l.name == light_name:
-            text += " *"
-            light = l
-        print(text)
+    hue = HueWrapper()
+    hue.connect()
 
-    if light.reachable:
-        on()
-        brightness(254)
-        for _ in range(5):
-            random_colour()
+    hue.on()
+    hue.brightness(254)
+    for _ in range(5):
+        hue.random_colour()
 
-        colour_temperature(154)
-        colour_temperature(500)
-        colour_temperature(154)
-        colour_loop()
-        off()
+    hue.colour_temperature(154)
+    hue.colour_temperature(500)
+    hue.colour_temperature(154)
+    hue.colour_loop()
+    hue.off()

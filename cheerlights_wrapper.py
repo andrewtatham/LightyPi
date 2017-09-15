@@ -1,10 +1,26 @@
 import pprint
 
 import requests
+from paho import mqtt
 
 latest_named = "http://api.thingspeak.com/channels/1417/field/1/last.json"
 latest_hex = "http://api.thingspeak.com/channels/1417/field/2/last.json"
 full = "http://api.thingspeak.com/channels/1417/feed.json"
+
+colours = {
+    'red': '#FF0000',
+    'green': '#008000',
+    'blue': '#0000FF',
+    'cyan': '#00FFFF',
+    'white': '#FFFFFF',
+    'oldlace': '#FDF5E6',
+    'warmwhite': '#FDF5E6',
+    'purple ': '#800080',
+    'magenta ': '#FF00FF',
+    'yellow': '#FFFF00',
+    'orange': '#FFA500',
+    'pink': '#FFC0CB'
+}
 
 
 class CheerlightsWrapper(object):
@@ -18,7 +34,7 @@ class CheerlightsWrapper(object):
     def history(self):
         json = requests.get(full).json()
         hex_list = list(map(lambda entry: entry["field2"], json["feeds"]))
-        self.set_latest(hex_list[-1:])
+        self.set_latest(hex_list[-1:][0])
         return hex_list
 
     def check(self):
