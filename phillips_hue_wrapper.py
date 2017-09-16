@@ -26,43 +26,54 @@ class HueWrapper(object):
         pprint.pprint(self.light.__dict__)
 
     def on(self):
-        self.light.on = True
+        if self.light:
+            self.light.on = True
 
     def colour_temperature(self, temp):
         # (white only) 154 is the coolest, 500 is the warmest
-        self.light.ct = temp
+        if self.light:
+            self.light.ct = temp
 
     def xy(self, x, y):
         #  co-ordinates in CIE 1931 space
-        self.light.xy = (x, y)
+        if self.light:
+            self.light.xy = (x, y)
 
     def random_colour(self):
-        self.light.xy = [random.random(), random.random()]
+        if self.light:
+            self.light.xy = [random.random(), random.random()]
 
     def hue(self, hue, sat):
         # hue' parameter has the range 0-65535 so represents approximately 182*degrees
         # sat is 0-255?
-        self.light.hue = hue
-        self.light.sat = sat
+        if self.light:
+            self.light.hue = hue
+            self.light.sat = sat
 
     def brightness(self, bright):
         # // brightness between 0-254 (NB 0 is not off!)
-        self.light.bri = bright
+        if self.light:
+            self.light.bri = bright
 
     def colour_loop(self):
-        self.light.effect = "colorloop"
+        if self.light:
+            self.light.effect = "colorloop"
 
     def flash_once(self):
-        self.light.alert = "select"
+        if self.light:
+            self.light.alert = "select"
 
     def flash_multiple(self):
-        self.light.alert = "lselect"
+        if self.light:
+            self.light.alert = "lselect"
 
     def flash_off(self):
-        self.light.alert = None
+        if self.light:
+            self.light.alert = None
 
     def off(self):
-        self.light.on = False
+        if self.light:
+            self.light.on = False
 
     @property
     def is_on(self):
