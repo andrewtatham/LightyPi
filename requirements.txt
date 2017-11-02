@@ -5,3 +5,4 @@ apscheduler
 AWSIoTPythonSDK
 phue
 paho-mqtt
+python3-gpiozero
