@@ -1,5 +1,5 @@
 from gpiozero import LEDBoard
-from gpiozero.tools import random_values
+from gpiozero.tools import random_values, sin_values
 from signal import pause
 
 
