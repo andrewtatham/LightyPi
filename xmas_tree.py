@@ -17,6 +17,6 @@ def sin():
 
 if __name__ == '__main__':
     tree = LEDBoard(*range(2, 28), pwm=True)
-    # random()
-    sin()
+    random()
+    # sin()
     pause()
