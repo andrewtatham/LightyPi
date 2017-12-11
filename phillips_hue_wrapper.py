@@ -5,7 +5,7 @@ from phue import Bridge
 
 
 class HueWrapper(object):
-    def __init__(self, bridge_ip='192.168.0.20', light_name='Hue color lamp 1'):
+    def __init__(self, bridge_ip='192.168.0.20', light_name='DEATH STAR'):
 
         self.light_name = light_name
         self.bridge_ip = bridge_ip
@@ -21,9 +21,9 @@ class HueWrapper(object):
                 text += " *"
                 self.light = l
             print(text)
-        if self.light.reachable:
+        if self.light:
             print("connected")
-        pprint.pprint(self.light.__dict__)
+            pprint.pprint(self.light.__dict__)
 
     def on(self):
         if self.light:
