@@ -1,4 +1,5 @@
 import colorsys
+import pprint
 
 from blinkstick import blinkstick
 
@@ -40,3 +41,8 @@ class BlinkstickHelper(blinkstick.BlinkStickPro):
     def push_show(self, rgb):
         self.push(rgb)
         self.show()
+
+
+if __name__ == '__main__':
+    bs = blinkstick.find_all()
+    pprint.pprint(bs)
