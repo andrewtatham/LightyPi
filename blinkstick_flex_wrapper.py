@@ -1,4 +1,4 @@
-from blinkstick_helper import BlinkstickHelper
+from blinkstick_helper import BlinkstickHelper, hsv_to_rgb
 
 
 class BlinkstickFlexWrapper(BlinkstickHelper):
@@ -6,10 +6,13 @@ class BlinkstickFlexWrapper(BlinkstickHelper):
         BlinkstickHelper.__init__(self, led_count, serial)
 
 
+
+
+
 if __name__ == '__main__':
     bs = BlinkstickFlexWrapper()
     try:
-        pass
+        bs.hello()
     except KeyboardInterrupt:
         pass
     finally:

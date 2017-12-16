@@ -11,6 +11,8 @@ def hsv_to_rgb(h, s, v):
     b = int(b * 255)
     return r, g, b
 
+s = 1.0
+v = 0.05
 
 class BlinkstickHelper(blinkstick.BlinkStickPro):
     def __init__(self, led_count, serial):
@@ -27,6 +29,8 @@ class BlinkstickHelper(blinkstick.BlinkStickPro):
             self.push((0, 0, 0))
         self.show()
 
+
+
     def push(self, rgb):
         self.buffer.insert(0, rgb)
         while len(self.buffer) > self.led_count:
@@ -41,6 +45,17 @@ class BlinkstickHelper(blinkstick.BlinkStickPro):
     def push_show(self, rgb):
         self.push(rgb)
         self.show()
+
+    def hello(self):
+        h_delta = 1.0 / self.led_count
+        h = 0.0
+        for t in range(self.led_count):
+            for led in range(self.led_count):
+                rgb = hsv_to_rgb(h, s, v)
+                self.push(rgb)
+                h += h_delta
+            self.show()
+            h += h_delta
 
 
 if __name__ == '__main__':

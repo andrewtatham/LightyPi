@@ -9,7 +9,7 @@ class BlinkstickNanoWrapper(BlinkstickHelper):
 if __name__ == '__main__':
     bs = BlinkstickNanoWrapper()
     try:
-        pass
+        bs.hello()
     except KeyboardInterrupt:
         pass
     finally:
