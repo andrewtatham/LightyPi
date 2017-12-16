@@ -169,6 +169,8 @@ class LightyPi():
             self.scheduler.add_job(self._aws_foobar_publish, on_the_minute)
 
     def _xmas(self):
+        if self.piglow:
+            self.piglow.xmas()
         for blinkstick in self.blinksticks:
             blinkstick.xmas()
 

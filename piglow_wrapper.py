@@ -30,6 +30,8 @@ class PiGlowWrapper(object):
         self._alt_on = 3
         self._off = 0
 
+        self._xmas_alt = False
+
         self.prev_hour_led = None
         self.prev_minute_led = None
         self.previous_state = None
@@ -44,7 +46,7 @@ class PiGlowWrapper(object):
             self._piglow.all(self._off)
             time.sleep(1)
 
-    def update_time(self, now=None):
+    def _update_time(self, now=None):
         if not now:
             now = datetime.datetime.now()
 
@@ -59,7 +61,6 @@ class PiGlowWrapper(object):
         if self.prev_minute_led and self.prev_minute_led != minute_led:
             self._piglow.led(self.prev_minute_led, self._off)
 
-
         self._piglow.led(hour_led, self._on)
 
         if self._alt:
@@ -72,9 +73,9 @@ class PiGlowWrapper(object):
         self.prev_hour_led = hour_led
         self.prev_minute_led = minute_led
 
-    def every_second(self):
+    def update_time(self):
         self._alt = not self._alt
-        self.update_time()
+        self._update_time()
 
     def off(self):
         self._piglow.all(0)
@@ -86,13 +87,13 @@ class PiGlowWrapper(object):
         if not self.previous_state or state != self.previous_state:
             self._set_train_state_lights(state, self._on)
         self.previous_state = state
-        self.update_time()
+        self._update_time()
 
     def trains_off(self):
         if self.previous_state:
             self._set_train_state_lights(self.previous_state, self._off)
         self.previous_state = None
-        self.update_time()
+        self._update_time()
 
     def _set_train_state_lights(self, state, value):
         if state == "Unknown":
@@ -110,6 +111,15 @@ class PiGlowWrapper(object):
         elif state == "NoTrains":
             self._piglow.red(value)
 
+    def xmas(self):
+        self._xmas_alt = not self._xmas_alt
+        if self._xmas_alt:
+            self._piglow.Green(self._alt_on)
+            self._piglow.Red(self._on)
+        else:
+            self._piglow.Green(self._on)
+            self._piglow.Red(self._alt_on)
+        self._update_time()
 
 def get():
     try:
