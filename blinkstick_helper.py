@@ -32,6 +32,10 @@ class BlinkstickHelper(blinkstick.BlinkStickPro):
             self.push((0, 0, 0))
         self.show()
 
+        red = 1.0
+        green = 1.0 / 3.0
+        self.xmas_hs = itertools.cycle([red, green])
+
     def push(self, rgb):
         self.buffer.insert(0, rgb)
         while len(self.buffer) > self.led_count:
@@ -58,11 +62,8 @@ class BlinkstickHelper(blinkstick.BlinkStickPro):
             h += h_delta
 
     def xmas(self):
-        red = 1.0
-        green = 1.0 / 3.0
-        colours = itertools.cycle([red, green])
-        while True:
-            self.push_show(hsv_to_rgb(next(colours), s, v))
+        h = next(self.xmas_hs)
+        self.push_show(hsv_to_rgb(h, s, v))
 
 
 if __name__ == '__main__':
