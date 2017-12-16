@@ -1,7 +1,7 @@
 import pprint
 
 import requests
-from paho import mqtt
+# from paho import mqtt
 
 latest_named = "http://api.thingspeak.com/channels/1417/field/1/last.json"
 latest_hex = "http://api.thingspeak.com/channels/1417/field/2/last.json"
@@ -48,8 +48,12 @@ class CheerlightsWrapper(object):
                 callback(hex)
 
 
+def printy_callback(foo):
+    print(foo)
+
+
 if __name__ == '__main__':
     c = CheerlightsWrapper()
-    c.subscribe(print)
+    c.subscribe(printy_callback)
     c.check()
     # pprint.pprint(c.history())
