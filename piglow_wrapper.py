@@ -114,12 +114,13 @@ class PiGlowWrapper(object):
     def xmas(self):
         self._xmas_alt = not self._xmas_alt
         if self._xmas_alt:
-            self._piglow.Green(self._alt_on)
-            self._piglow.Red(self._on)
+            self._piglow.green(self._alt_on)
+            self._piglow.red(self._on)
         else:
-            self._piglow.Green(self._on)
-            self._piglow.Red(self._alt_on)
+            self._piglow.green(self._on)
+            self._piglow.red(self._alt_on)
         self._update_time()
+
 
 def get():
     try:
