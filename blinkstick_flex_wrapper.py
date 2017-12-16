@@ -13,6 +13,7 @@ if __name__ == '__main__':
     bs = BlinkstickFlexWrapper()
     try:
         bs.hello()
+        bs.xmas()
     except KeyboardInterrupt:
         pass
     finally:

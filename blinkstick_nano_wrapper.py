@@ -10,6 +10,7 @@ if __name__ == '__main__':
     bs = BlinkstickNanoWrapper()
     try:
         bs.hello()
+        bs.xmas()
     except KeyboardInterrupt:
         pass
     finally:
