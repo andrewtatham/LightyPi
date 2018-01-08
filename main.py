@@ -5,13 +5,14 @@ if __name__ == '__main__':
 
     pi.piglow_clock()
 
-    pi.cheerlights_subscribe()
+    # pi.cheerlights_subscribe()
+    #
+    # pi.aws_iot_button_subscribe()
+    #
+    # pi.aws_foobar_subscribe()
+    # pi.aws_foobar_publish()
 
-    pi.aws_iot_button_subscribe()
-
-    pi.aws_foobar_subscribe()
-    pi.aws_foobar_publish()
-
+    pi.blinkstick_something()
 
 try:
     pi.run()
