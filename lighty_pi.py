@@ -160,7 +160,7 @@ class LightyPi():
 
     def piglow_clock(self):
         if self.piglow:
-            self.scheduler.add_job(func=self.piglow.every_second, trigger=every_second)
+            self.scheduler.add_job(func=self.piglow.update_time, trigger=every_second)
 
     def cheerlights_subscribe(self):
         if self.cheer:

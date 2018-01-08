@@ -12,7 +12,7 @@ if __name__ == '__main__':
     # pi.aws_foobar_subscribe()
     # pi.aws_foobar_publish()
 
-    pi.blinkstick_something()
+    pi.larsson_scanner()
 
 try:
     pi.run()
