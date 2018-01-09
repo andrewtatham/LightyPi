@@ -40,6 +40,9 @@ def fade_hsv(hsv):
     return hsv[0], hsv[1], v_new
 
 
+black = rgb_to_hsv((0, 0, 0))
+
+
 class BlinkstickHelper(blinkstick.BlinkStickPro):
     def __init__(self, led_count, serial):
         self.led_count = led_count
@@ -53,34 +56,33 @@ class BlinkstickHelper(blinkstick.BlinkStickPro):
         self.is_enabled = True
         self.buffer = []
         for _ in range(led_count):
-            self.push((0, 0, 0))
+            self.push(black)
         self.show()
 
         red = 1.0
         green = 1.0 / 3.0
         self.xmas_hs = itertools.cycle([red, green])
 
-    def push(self, rgb):
+    def push(self, hsv):
         if self.is_enabled:
-            self.buffer.insert(0, rgb)
+            self.buffer.insert(0, hsv)
             while len(self.buffer) > self.led_count:
                 self.buffer.pop()
 
     def show(self):
         if self.is_enabled:
             for index in range(self.led_count):
-                rgb = self.buffer[index]
+                hsv = self.buffer[index]
+                rgb = hsv_to_rgb2(hsv)
                 self.set_color(0, index, rgb[0], rgb[1], rgb[2])
             self.send_data_all()
 
     def fade(self):
         if self.is_enabled:
             for index in range(self.led_count):
-                rgb = self.buffer[index]
-                hsv = rgb_to_hsv(rgb)
+                hsv = self.buffer[index]
                 hsv = fade_hsv(hsv)
-                rgb = hsv_to_rgb2(hsv)
-                self.buffer[index] = rgb
+                self.buffer[index] = hsv
 
     def enable(self):
         self.is_enabled = True
@@ -90,9 +92,9 @@ class BlinkstickHelper(blinkstick.BlinkStickPro):
         self.off()
         self.is_enabled = False
 
-    def push_show(self, rgb):
+    def push_show(self, hsv):
         if self.is_enabled:
-            self.push(rgb)
+            self.push(hsv)
             self.show()
 
     def hello(self):
@@ -101,7 +103,7 @@ class BlinkstickHelper(blinkstick.BlinkStickPro):
             h = 0.0
             for t in range(self.led_count):
                 for led in range(self.led_count):
-                    self.push(hsv_to_rgb(h, s, v))
+                    self.push((h, s, v))
                     h += h_delta
                 self.show()
                 h += h_delta
@@ -109,7 +111,7 @@ class BlinkstickHelper(blinkstick.BlinkStickPro):
     def xmas(self):
         if self.is_enabled:
             h = next(self.xmas_hs)
-            self.push_show(hsv_to_rgb(h, s, v))
+            self.push_show((h, s, v))
 
 
 if __name__ == '__main__':

@@ -1,6 +1,4 @@
-import time
-
-from blinkstick_helper import BlinkstickHelper, hsv_to_rgb
+from blinkstick_helper import BlinkstickHelper
 
 
 def h_delta(h, delta):
@@ -19,24 +17,25 @@ class BlinkstickFlexWrapper(BlinkstickHelper):
         h = 0
         while self.is_enabled:
             h = h_delta(h, 0.001)
-            rgb = hsv_to_rgb(h, 1.0, 64)
-            self._larsson_scanner(rgb)
+            hsv = (h, 1.0, 64)
+            self._larsson_scanner(hsv)
 
-    def _larsson_scanner(self, rgb):
-        self.fade()
-        if self.larsson_scanner_direction:
-            self.larsson_scanner_index += 1
-        else:
-            self.larsson_scanner_index -= 1
-        if self.larsson_scanner_index <= 0:
-            self.larsson_scanner_direction = True
-            self.larsson_scanner_index = 0
-        if self.larsson_scanner_index >= self.led_count - 1:
-            self.larsson_scanner_direction = False
-            self.larsson_scanner_index = self.led_count - 1
+    def _larsson_scanner(self, hsv):
+        if self.is_enabled:
+            self.fade()
+            if self.larsson_scanner_direction:
+                self.larsson_scanner_index += 1
+            else:
+                self.larsson_scanner_index -= 1
+            if self.larsson_scanner_index <= 0:
+                self.larsson_scanner_direction = True
+                self.larsson_scanner_index = 0
+            if self.larsson_scanner_index >= self.led_count - 1:
+                self.larsson_scanner_direction = False
+                self.larsson_scanner_index = self.led_count - 1
 
-        self.buffer[self.larsson_scanner_index] = rgb
-        self.show()
+            self.buffer[self.larsson_scanner_index] = hsv
+            self.show()
 
 
 if __name__ == '__main__':
