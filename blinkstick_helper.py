@@ -50,8 +50,7 @@ class BlinkstickHelper(blinkstick.BlinkStickPro):
         super(BlinkstickHelper, self).__init__(
             r_led_count=led_count,
             g_led_count=led_count,
-            b_led_count=led_count,
-            delay=0.04)
+            b_led_count=led_count)
         self.connect(serial=serial)
         self.is_enabled = True
         self.buffer = []
@@ -112,6 +111,13 @@ class BlinkstickHelper(blinkstick.BlinkStickPro):
         if self.is_enabled:
             h = next(self.xmas_hs)
             self.push_show((h, s, v))
+
+    def all(self, rgb):
+        hsv = rgb_to_hsv(rgb)
+        for index in range(self.led_count):
+            self.buffer[index] = hsv
+            self.set_color(0, index, rgb[0], rgb[1], rgb[2])
+        self.send_data_all()
 
 
 if __name__ == '__main__':

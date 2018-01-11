@@ -1,3 +1,4 @@
+feedparser
 colour
 requests
 blinkstick
@@ -5,3 +6,4 @@ apscheduler
 AWSIoTPythonSDK
 phue
 paho-mqtt
+Astral

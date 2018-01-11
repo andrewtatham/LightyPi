@@ -35,7 +35,7 @@ on_the_minute = CronTrigger(minute="1-59", second=0)
 every_second = CronTrigger(second="*")
 at_morning = CronTrigger(hour=6)
 at_bedtime = CronTrigger(hour=23)
-
+every_fifteen_minutes = CronTrigger(minute="*/15")
 
 def _get_cron_trigger_for_datetime(dt):
     return CronTrigger(year=dt.year, month=dt.month, day=dt.day, hour=dt.hour, minute=dt.minute, second=dt.second)
@@ -269,11 +269,16 @@ class LightyPi():
     def _at_bedtime(self):
         self.lights_off()
 
+    def sportball(self):
+        self.scheduler.add_job(self._sportball, every_fifteen_minutes)
+
 
 if __name__ == '__main__':
     pi = LightyPi()
 
     pi.larsson_scanner()
+
+    pi.sportball()
 
     try:
         pi.run()
