@@ -271,7 +271,7 @@ class LightyPi():
 
     def sportball(self):
         self.scheduler.add_job(self._sportball, every_fifteen_minutes)
-
+    def _sportball(self):
 
 if __name__ == '__main__':
     pi = LightyPi()

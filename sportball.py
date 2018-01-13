@@ -1,6 +1,7 @@
 import datetime
 import time
 import re
+from colorsys import rgb_to_hsv
 
 from blinkstick import blinkstick
 import feedparser
@@ -9,6 +10,7 @@ from apscheduler.triggers.interval import IntervalTrigger
 
 from blinkstick_flex_wrapper import BlinkstickFlexWrapper
 from blinkstick_nano_wrapper import BlinkstickNanoWrapper
+from phillips_hue_wrapper import HueWrapper
 
 feed_url = "https://www.scorespro.com/rss2/live-soccer.xml"
 rx = re.compile("^\((\w*)-(\w*)\) (.*) vs (.*): (\d*)-(\d*) - (.*)$", re.MULTILINE)
@@ -24,8 +26,8 @@ class SportballEvent(object):
             self.league = match.group(2)
             self.home_team = match.group(3)
             self.away_team = match.group(4)
-            self.home_score = match.group(5)
-            self.away_score = match.group(6)
+            self.home_score = int(match.group(5))
+            self.away_score = int(match.group(6))
             self.event_type = match.group(7)
             self.key = "{} {}".format(self.entry_published, self.entry_summary)
         else:
@@ -132,24 +134,16 @@ class Rule(object):
                 self._lights(".", colour)
 
     def scores(self, event, colours):
-
         if event.home_score == 0:
             self._pause("-")
         else:
-            for _ in event.home_score:
-                for colour in colours.home_team_colours:
-                    self._lights(".", colour)
-                self._pause(".")
-            self._pause("-")
-
+            self._lights("." * event.home_score, colours.home_team_colours[0])
+        self.whistle(".")
         if event.away_score == 0:
             self._pause("-")
         else:
-            for _ in event.away_score:
-                for colour in colours.away_team_colours:
-                    self._lights(".", colour)
-                self._pause(".")
-            self._pause("-")
+            self._lights("." * event.away_score, colours.away_team_colours[0])
+        self.whistle(".")
 
     def _pause(self, param):
         time.sleep(1)
@@ -188,12 +182,21 @@ def update():
         event = SportballEvent(entry)
         event_filter.process_event(event)
 
+
 class Lights(object):
-    pass
+    def display(self, pattern, colour):
+        print("{} {}".format(pattern, colour))
+
+    def off(self):
+        print("off")
+
 
 class ConsoleLights(Lights):
     def display(self, pattern, colour):
         print("{} {}".format(pattern, colour))
+
+    def off(self):
+        print("off")
 
 
 class BlinkstickLights(Lights):
@@ -206,10 +209,47 @@ class BlinkstickLights(Lights):
                 self._bs.off()
                 time.sleep(1)
             elif char == ".":
+                print("dot")
                 self._bs.all(colour)
+                time.sleep(0.5)
             elif char == "-":
+                print("dash")
                 self._bs.all(colour)
+                time.sleep(2)
+            self._bs.off()
+            time.sleep(0.5)  # gap between chars
+        time.sleep(0.5)  # gap between patterns
+
+    def off(self):
+        self._bs.off()
+
+
+class HueLightsAdapter(Lights):
+    def __init__(self, hue_wrapper):
+        self._hue = hue_wrapper
+
+    def display(self, pattern, colour):
+        self._hue.off()
+        time.sleep(0.5)  # gap between patterns
+        hsv = rgb_to_hsv(*colour)
+        self._hue.set_hsv(*hsv)
+        for char in pattern:
+            if char == " ":
                 time.sleep(1)
+            elif char == ".":
+                print("dot")
+                self._hue.on()
+                time.sleep(0.5)
+            elif char == "-":
+                print("dash")
+                self._hue.on()
+                time.sleep(2)
+            self._hue.off()
+            time.sleep(0.5)  # gap between chars
+        time.sleep(0.5)  # gap between patterns
+
+    def off(self):
+        self._hue.off()
 
 
 def _init_blinksticks(lights):
@@ -227,6 +267,15 @@ def _init_blinksticks(lights):
             print("UNKNOWN {}".format(description))
 
 
+event_filter = None
+
+
+def _init_hue(lights):
+    hue = HueWrapper()
+    hue.connect()
+    hue.quick_transitions()
+    lights.append(HueLightsAdapter(hue))
+
 
 if __name__ == '__main__':
     lights = [
@@ -234,6 +283,7 @@ if __name__ == '__main__':
     ]
 
     _init_blinksticks(lights)
+    _init_hue(lights)
 
     rules = [
         Leeds(lights),
@@ -248,6 +298,9 @@ if __name__ == '__main__':
         update()
         scheduler.start()
     except KeyboardInterrupt:
-        scheduler.shutdown()
-    finally:
         pass
+    finally:
+        if scheduler.running:
+            scheduler.shutdown()
+        for light in lights:
+            light.off()

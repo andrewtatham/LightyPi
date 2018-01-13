@@ -90,6 +90,10 @@ class HueWrapper(object):
         self.light.sat = s
         self.light.bri = v
 
+    def quick_transitions(self):
+        if self.light:
+            self.light.transitiontime = 0
+
 
 if __name__ == '__main__':
     hue = HueWrapper()
