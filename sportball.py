@@ -1,4 +1,6 @@
+import ssl
 import datetime
+import pprint
 import time
 import re
 from colorsys import rgb_to_hsv
@@ -20,21 +22,31 @@ class SportballEvent(object):
     def __init__(self, entry):
         self.entry_summary = entry['summary']
         self.entry_published = entry["published"]
+        # print(self.entry_summary)
         match = rx.match(self.entry_summary)
         if match:
             self.country = match.group(1)
             self.league = match.group(2)
             self.home_team = match.group(3)
             self.away_team = match.group(4)
-            self.home_score = int(match.group(5))
-            self.away_score = int(match.group(6))
+
+            self.home_score = self.parse_score(match.group(5))
+            self.away_score = self.parse_score(match.group(6))
             self.event_type = match.group(7)
             self.key = "{} {}".format(self.entry_published, self.entry_summary)
+
         else:
             raise Exception("Failed to parse ()".format(self.entry_summary))
 
-    def __str__(self):
-        return "{} {}".format(self.entry_published, self.entry_summary)
+    def parse_score(self, text):
+        if text == '':
+            return None
+        else:
+            return int(text)
+
+
+def __str__(self):
+    return "{} {}".format(self.entry_published, self.entry_summary)
 
 
 class SportballEventFilter(object):
@@ -45,6 +57,7 @@ class SportballEventFilter(object):
     def process_event(self, event):
         is_new_event = event.key not in self.event_keys
         if is_new_event:
+            print(event.entry_summary)
             for rule in self.rules:
                 rule.process_event(event)
 
@@ -91,6 +104,8 @@ class Rule(object):
                 self.on_half_time(event, colours)
             elif event.event_type == "Match Finished":
                 self.on_full_time(event, colours)
+            elif event.event_type == "Match Postponed":
+                pass
             else:
                 raise Exception("Unknown event type {}".format(event.event_type))
 
@@ -173,14 +188,20 @@ class AllTheThings(Rule):
 
 
 def update():
-    print(datetime.datetime.now())
+    # hack to prevent bozo errors
+    if hasattr(ssl, '_create_unverified_context'):
+        ssl._create_default_https_context = ssl._create_unverified_context
+    print("Updating {}".format(datetime.datetime.now()))
     feed = feedparser.parse(feed_url)
+    # pprint.pprint(feed)
     entries = feed['entries']
+    print("Recieved {} entries".format(len(entries)))
     entries.reverse()
     for entry in entries:
         # print(entry['summary'])
         event = SportballEvent(entry)
         event_filter.process_event(event)
+    print("Updated {}".format(datetime.datetime.now()))
 
 
 class Lights(object):
@@ -283,16 +304,16 @@ if __name__ == '__main__':
     ]
 
     _init_blinksticks(lights)
-    _init_hue(lights)
+    # _init_hue(lights)
 
     rules = [
         Leeds(lights),
-        AllTheThings(lights)
+        # AllTheThings(lights)
     ]
     event_filter = SportballEventFilter(rules)
 
     scheduler = BlockingScheduler()
-    scheduler.add_job(update, IntervalTrigger(minutes=15))
+    scheduler.add_job(update, IntervalTrigger(minutes=1))
 
     try:
         update()
