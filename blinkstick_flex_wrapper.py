@@ -1,3 +1,4 @@
+import time
 from blinkstick_helper import BlinkstickHelper
 
 
@@ -19,6 +20,12 @@ class BlinkstickFlexWrapper(BlinkstickHelper):
             h = h_delta(h, 0.001)
             hsv = (h, 1.0, 64)
             self._larsson_scanner(hsv)
+        still_on = True
+        while still_on:
+            time.sleep(1)
+            still_on = self.fade()
+            self.show()
+
 
     def _larsson_scanner(self, hsv):
         if self.is_enabled:

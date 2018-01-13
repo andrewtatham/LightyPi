@@ -69,19 +69,20 @@ class BlinkstickHelper(blinkstick.BlinkStickPro):
                 self.buffer.pop()
 
     def show(self):
-        if self.is_enabled:
-            for index in range(self.led_count):
-                hsv = self.buffer[index]
-                rgb = hsv_to_rgb2(hsv)
-                self.set_color(0, index, rgb[0], rgb[1], rgb[2])
-            self.send_data_all()
+        for index in range(self.led_count):
+            hsv = self.buffer[index]
+            rgb = hsv_to_rgb2(hsv)
+            self.set_color(0, index, rgb[0], rgb[1], rgb[2])
+        self.send_data_all()
 
     def fade(self):
-        if self.is_enabled:
-            for index in range(self.led_count):
-                hsv = self.buffer[index]
-                hsv = fade_hsv(hsv)
-                self.buffer[index] = hsv
+        still_on = False
+        for index in range(self.led_count):
+            hsv = self.buffer[index]
+            hsv = fade_hsv(hsv)
+            still_on = still_on or hsv[2] > 0
+            self.buffer[index] = hsv
+        return still_on
 
     def enable(self):
         self.is_enabled = True

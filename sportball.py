@@ -15,7 +15,7 @@ from blinkstick_nano_wrapper import BlinkstickNanoWrapper
 from phillips_hue_wrapper import HueWrapper
 
 feed_url = "https://www.scorespro.com/rss2/live-soccer.xml"
-rx = re.compile("^\((\w*)-(\w*)\) (.*) vs (.*): (\d*)-(\d*) - (.*)$", re.MULTILINE)
+rx = re.compile("^\((\w*)-(\w*)\) (.*) vs (.*): (\d*)-(\d*) - ?(.*)$", re.MULTILINE)
 
 
 class SportballEvent(object):
@@ -36,7 +36,7 @@ class SportballEvent(object):
             self.key = "{} {}".format(self.entry_published, self.entry_summary)
 
         else:
-            raise Exception("Failed to parse ()".format(self.entry_summary))
+            raise Exception("Failed to parse {}".format(self.entry_summary))
 
     def parse_score(self, text):
         if text == '':
@@ -97,9 +97,9 @@ class Rule(object):
                 else:
                     self.on_conceded_a_goal(event, colours)
             elif event.event_type == "Kick Off":
-                pass
+                self.whistle(".")
             elif event.event_type == "2nd Half Started":
-                pass
+                self.whistle(".")
             elif event.event_type == "Halftime":
                 self.on_half_time(event, colours)
             elif event.event_type == "Match Finished":
@@ -167,8 +167,8 @@ class Rule(object):
 class Leeds(Rule):
     def __init__(self, lights):
         super(Leeds, self).__init__(
-            "Leeds",
-            [(8, 8, 0), (0, 0, 8)],
+            "Vikingur Reykjavik",
+            [(0, 0, 8), (8, 8, 0)],
             [(8, 0, 0), (0, 8, 8)],
             lights
         )
@@ -178,13 +178,13 @@ class AllTheThings(Rule):
     def __init__(self, lights):
         super(AllTheThings, self).__init__(
             None,
-            [(8, 8, 0), (0, 0, 8)],
-            [(8, 0, 0), (0, 8, 8)],
+            [(0, 8, 0), (0, 8, 8)],
+            [(8, 0, 0), (8, 0, 8)],
             lights
         )
 
     def team_name_match(self, event):
-        return True
+        return event.country == "ENG"
 
 
 def update():
@@ -308,12 +308,12 @@ if __name__ == '__main__':
 
     rules = [
         Leeds(lights),
-        # AllTheThings(lights)
+        AllTheThings(lights)
     ]
     event_filter = SportballEventFilter(rules)
 
     scheduler = BlockingScheduler()
-    scheduler.add_job(update, IntervalTrigger(minutes=1))
+    scheduler.add_job(update, IntervalTrigger(seconds=30))
 
     try:
         update()

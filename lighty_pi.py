@@ -11,6 +11,7 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 from blinkstick import blinkstick
 
+import sportball
 import train_check
 import piglow_wrapper
 from aws_wrapper import AwsClient, AwsIotButtonEvent
@@ -36,6 +37,7 @@ every_second = CronTrigger(second="*")
 at_morning = CronTrigger(hour=6)
 at_bedtime = CronTrigger(hour=23)
 every_fifteen_minutes = CronTrigger(minute="*/15")
+
 
 def _get_cron_trigger_for_datetime(dt):
     return CronTrigger(year=dt.year, month=dt.month, day=dt.day, hour=dt.hour, minute=dt.minute, second=dt.second)
@@ -271,7 +273,10 @@ class LightyPi():
 
     def sportball(self):
         self.scheduler.add_job(self._sportball, every_fifteen_minutes)
+
     def _sportball(self):
+        sportball.update()
+
 
 if __name__ == '__main__':
     pi = LightyPi()
