@@ -45,10 +45,13 @@ class ScrollHatWrapper(object):
     def scroll(self):
         while True:
             if not self._scroll_finished():
+                print("scrolling")
                 self._scroll()
             elif self._scroll_finished() and any(self.q):
+                print("dequeue")
                 self._dequeue()
             else:
+                print("idle")
                 scrollphathd.clear()
                 self.enqueue(datetime.datetime.now().strftime("%X"))  # Time
                 scrollphathd.show()
@@ -60,3 +63,4 @@ class ScrollHatWrapper(object):
     def close(self):
         scrollphathd.clear()
         scrollphathd.show()
+
