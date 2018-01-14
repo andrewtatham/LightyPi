@@ -13,6 +13,7 @@ from apscheduler.triggers.interval import IntervalTrigger
 from blinkstick_flex_wrapper import BlinkstickFlexWrapper
 from blinkstick_nano_wrapper import BlinkstickNanoWrapper
 from phillips_hue_wrapper import HueWrapper
+from scrollhat_wrapper import ScrollHatWrapper
 
 feed_url = "https://www.scorespro.com/rss2/live-soccer.xml"
 rx = re.compile("^\((\w*)-(\w*)\) (.*) vs (.*): (\d*)-(\d*) - ?(.*)$", re.MULTILINE)
@@ -69,17 +70,19 @@ class TeamColours(object):
 
 
 class Rule(object):
-    def __init__(self, my_team_name, my_team_colours, not_my_team_colours, lights):
+    def __init__(self, my_team_name, my_team_colours, not_my_team_colours, lights, display):
         self.lights = lights
         self.my_team_name = my_team_name
         self.my_team_scored_goal_event_type = "Goal for {}".format(self.my_team_name)
         self.whistle_colour = (8, 8, 8)
         self.my_team_colours = my_team_colours
         self.not_my_team_colours = not_my_team_colours
+        self.display = display
 
     def process_event(self, event):
 
         if self.team_name_match(event):
+            self._display(event)
 
             colours = TeamColours()
 
@@ -108,6 +111,10 @@ class Rule(object):
                 pass
             else:
                 raise Exception("Unknown event type {}".format(event.event_type))
+
+    def _display(self, event):
+        if self.display:
+            self.display.show(event.entry_summary)
 
     def team_name_match(self, event):
         return self.my_team_name in event.home_team or self.my_team_name in event.away_team
@@ -166,22 +173,24 @@ bright = 255
 
 
 class Leeds(Rule):
-    def __init__(self, lights):
+    def __init__(self, lights, display):
         super(Leeds, self).__init__(
             "Leeds",
             [(0, 0, bright), (bright, bright, 0)],
             [(bright, 0, 0), (0, bright, bright)],
-            lights
+            lights,
+            display
         )
 
 
 class AllTheThings(Rule):
-    def __init__(self, lights):
+    def __init__(self, lights, display):
         super(AllTheThings, self).__init__(
             None,
             [(0, bright, 0), (0, bright, bright)],
             [(bright, 0, 0), (bright, 0, bright)],
-            lights
+            lights,
+            display
         )
 
     def team_name_match(self, event):
@@ -341,15 +350,16 @@ if __name__ == '__main__':
 
     _init_blinksticks(lights)
     # _init_hue(lights)
-
+    display = ScrollHatWrapper()
     rules = [
-        Leeds(lights),
-        AllTheThings(lights)
+        Leeds(lights, display),
+        AllTheThings(lights, display)
     ]
     event_filter = SportballEventFilter(rules)
 
     scheduler = BlockingScheduler()
     scheduler.add_job(update, IntervalTrigger(minutes=1))
+    scheduler.add_job(display.scroll)
 
     try:
         update()
