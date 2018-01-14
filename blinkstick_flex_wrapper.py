@@ -26,7 +26,6 @@ class BlinkstickFlexWrapper(BlinkstickHelper):
             still_on = self.fade()
             self.show()
 
-
     def _larsson_scanner(self, hsv):
         if self.is_enabled:
             self.fade()

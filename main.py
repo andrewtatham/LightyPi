@@ -14,9 +14,9 @@ if __name__ == '__main__':
 
     pi.larsson_scanner()
 
-try:
-    pi.run()
-except KeyboardInterrupt:
-    pass
-finally:
-    pi.shutdown()
+    try:
+        pi.run()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        pi.shutdown()

@@ -114,17 +114,17 @@ class Rule(object):
 
     def on_scored_a_goal(self, event, colours):
         print(event)
-        self.whistle("-")
-        self.gooooooaaaaaalllllll(self.my_team_colours)
         self.whistle(".")
-        self.scores(event, colours)
+        self.gooooooaaaaaalllllll(self.my_team_colours)
+        # self.whistle(".")
+        # self.scores(event, colours)
 
     def on_conceded_a_goal(self, event, colours):
         print(event)
-        self.whistle("-")
-        self.gooooooaaaaaalllllll(self.not_my_team_colours)
         self.whistle(".")
-        self.scores(event, colours)
+        self.gooooooaaaaaalllllll(self.not_my_team_colours)
+        # self.whistle(".")
+        # self.scores(event, colours)
 
     def on_half_time(self, event, colours):
         print(event)
@@ -144,32 +144,33 @@ class Rule(object):
         self._lights(pattern, self.whistle_colour)
 
     def gooooooaaaaaalllllll(self, colours):
-        for _ in range(5):
-            for colour in colours:
-                self._lights(".", colour)
+        self._lights("!", colours)
 
     def scores(self, event, colours):
         if event.home_score == 0:
             self._pause("-")
         else:
             self._lights("." * event.home_score, colours.home_team_colours[0])
-        self.whistle(".")
+        # self.whistle(".")
         if event.away_score == 0:
             self._pause("-")
         else:
             self._lights("." * event.away_score, colours.away_team_colours[0])
-        self.whistle(".")
+        # self.whistle(".")
 
     def _pause(self, param):
         time.sleep(1)
 
 
+bright = 255
+
+
 class Leeds(Rule):
     def __init__(self, lights):
         super(Leeds, self).__init__(
-            "Vikingur Reykjavik",
-            [(0, 0, 8), (8, 8, 0)],
-            [(8, 0, 0), (0, 8, 8)],
+            "Leeds",
+            [(0, 0, bright), (bright, bright, 0)],
+            [(bright, 0, 0), (0, bright, bright)],
             lights
         )
 
@@ -178,13 +179,13 @@ class AllTheThings(Rule):
     def __init__(self, lights):
         super(AllTheThings, self).__init__(
             None,
-            [(0, 8, 0), (0, 8, 8)],
-            [(8, 0, 0), (8, 0, 8)],
+            [(0, bright, 0), (0, bright, bright)],
+            [(bright, 0, 0), (bright, 0, bright)],
             lights
         )
 
     def team_name_match(self, event):
-        return event.country == "ENG"
+        return True
 
 
 def update():
@@ -195,7 +196,7 @@ def update():
     feed = feedparser.parse(feed_url)
     # pprint.pprint(feed)
     entries = feed['entries']
-    print("Recieved {} entries".format(len(entries)))
+    # print("Received {} entries".format(len(entries)))
     entries.reverse()
     for entry in entries:
         # print(entry['summary'])
@@ -225,6 +226,8 @@ class BlinkstickLights(Lights):
         self._bs = blinkstick_helper
 
     def display(self, pattern, colour):
+        self._bs.off()
+        time.sleep(0.5)  # gap between chars
         for char in pattern:
             if char == " ":
                 self._bs.off()
@@ -237,6 +240,12 @@ class BlinkstickLights(Lights):
                 print("dash")
                 self._bs.all(colour)
                 time.sleep(2)
+            elif char == "!":
+                print("exclamation")
+                for _ in range(5):
+                    for c in colour:
+                        self._bs.all(c)
+                        time.sleep(0.5)
             self._bs.off()
             time.sleep(0.5)  # gap between chars
         time.sleep(0.5)  # gap between patterns
@@ -247,31 +256,56 @@ class BlinkstickLights(Lights):
 
 class HueLightsAdapter(Lights):
     def __init__(self, hue_wrapper):
+        self._state = {}
         self._hue = hue_wrapper
 
     def display(self, pattern, colour):
+        self.save_state()
+
         self._hue.off()
         time.sleep(0.5)  # gap between patterns
-        hsv = rgb_to_hsv(*colour)
-        self._hue.set_hsv(*hsv)
+
         for char in pattern:
             if char == " ":
                 time.sleep(1)
             elif char == ".":
                 print("dot")
+                hsv = rgb_to_hsv(*colour)
+                self._hue.set_hsv(*hsv)
                 self._hue.on()
                 time.sleep(0.5)
             elif char == "-":
                 print("dash")
+                hsv = rgb_to_hsv(*colour)
+                self._hue.set_hsv(*hsv)
                 self._hue.on()
                 time.sleep(2)
+            elif char == "!":
+                print("exclamation")
+                for c in colour:
+                    hsv = rgb_to_hsv(*c)
+                    self._hue.set_hsv(*hsv)
+                    self._hue.on()
+                    time.sleep(0.5)
             self._hue.off()
             time.sleep(0.5)  # gap between chars
         time.sleep(0.5)  # gap between patterns
+        self.recall_state()
 
     def off(self):
         self._hue.off()
 
+    def save_state(self):
+        print("Saving state")
+        pprint.pprint(self._hue.light.__dict__)
+        self._state["on"] = self._hue.light.on
+        # pprint.pprint(self._state)
+
+
+    def recall_state(self):
+        print("Recalling state")
+        pprint.pprint(self._state)
+        self._hue.light.on = self._state["on"]
 
 def _init_blinksticks(lights):
     blinksticks = blinkstick.find_all()
@@ -296,6 +330,9 @@ def _init_hue(lights):
     hue.connect()
     hue.quick_transitions()
     lights.append(HueLightsAdapter(hue))
+    hue.on()
+    hue.brightness(254)
+
 
 
 if __name__ == '__main__':
@@ -304,7 +341,7 @@ if __name__ == '__main__':
     ]
 
     _init_blinksticks(lights)
-    # _init_hue(lights)
+    _init_hue(lights)
 
     rules = [
         Leeds(lights),
@@ -313,7 +350,7 @@ if __name__ == '__main__':
     event_filter = SportballEventFilter(rules)
 
     scheduler = BlockingScheduler()
-    scheduler.add_job(update, IntervalTrigger(seconds=30))
+    scheduler.add_job(update, IntervalTrigger(minutes=1))
 
     try:
         update()

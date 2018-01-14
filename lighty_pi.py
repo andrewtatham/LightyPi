@@ -260,6 +260,7 @@ class LightyPi():
         self.scheduler.add_job(self._at_morning, at_morning)
         self.scheduler.add_job(self._at_bedtime, at_bedtime)
         self.scheduler.add_job(self._larsson_scanner, at_morning)
+        self._larsson_scanner()
 
     def _larsson_scanner(self):
         if self.blinkstick_flex:
