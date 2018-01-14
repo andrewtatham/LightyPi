@@ -20,6 +20,7 @@ class BlinkstickFlexWrapper(BlinkstickHelper):
             h = h_delta(h, 0.001)
             hsv = (h, 1.0, 64)
             self._larsson_scanner(hsv)
+            time.sleep(0.1)
         still_on = True
         while still_on:
             time.sleep(1)
