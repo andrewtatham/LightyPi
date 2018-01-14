@@ -301,11 +301,11 @@ class HueLightsAdapter(Lights):
         self._state["on"] = self._hue.light.on
         # pprint.pprint(self._state)
 
-
     def recall_state(self):
         print("Recalling state")
         pprint.pprint(self._state)
         self._hue.light.on = self._state["on"]
+
 
 def _init_blinksticks(lights):
     blinksticks = blinkstick.find_all()
@@ -334,14 +334,13 @@ def _init_hue(lights):
     hue.brightness(254)
 
 
-
 if __name__ == '__main__':
     lights = [
         ConsoleLights(),
     ]
 
     _init_blinksticks(lights)
-    _init_hue(lights)
+    # _init_hue(lights)
 
     rules = [
         Leeds(lights),
