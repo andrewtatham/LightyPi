@@ -2,6 +2,8 @@ import datetime
 import scrollphathd
 import time
 from scrollphathd.fonts import font5x7smoothed
+import logging
+logging.basicConfig()
 
 scrollphathd.rotate(degrees=180)
 scrollphathd.clear()

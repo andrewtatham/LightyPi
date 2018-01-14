@@ -14,6 +14,8 @@ from blinkstick_flex_wrapper import BlinkstickFlexWrapper
 from blinkstick_nano_wrapper import BlinkstickNanoWrapper
 from phillips_hue_wrapper import HueWrapper
 from scrollhat_wrapper import ScrollHatWrapper
+import logging
+logging.basicConfig()
 
 feed_url = "https://www.scorespro.com/rss2/live-soccer.xml"
 rx = re.compile("^\((\w*)-(\w*)\) (.*) vs (.*): (\d*)-(\d*) - ?(.*)$", re.MULTILINE)
