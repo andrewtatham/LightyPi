@@ -3,6 +3,7 @@ import scrollphathd
 import time
 from scrollphathd.fonts import font5x7smoothed
 import logging
+
 logging.basicConfig()
 
 scrollphathd.rotate(degrees=180)
@@ -45,17 +46,13 @@ class ScrollHatWrapper(object):
     def scroll(self):
         while True:
             if not self._scroll_finished():
-                print("scrolling")
                 self._scroll()
             elif self._scroll_finished() and any(self.q):
-                print("dequeue")
                 self._dequeue()
             else:
-                print("idle")
                 scrollphathd.clear()
-                self.enqueue(datetime.datetime.now().strftime("%X"))  # Time
                 scrollphathd.show()
-                time.sleep(0.25)
+                time.sleep(1)
 
     def show(self, text):
         self.enqueue(text)
@@ -63,4 +60,3 @@ class ScrollHatWrapper(object):
     def close(self):
         scrollphathd.clear()
         scrollphathd.show()
-
