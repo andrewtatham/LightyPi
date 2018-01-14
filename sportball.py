@@ -364,8 +364,8 @@ if __name__ == '__main__':
     scheduler.add_job(display.scroll)
 
     try:
-        update()
         scheduler.start()
+        update()
     except KeyboardInterrupt:
         pass
     finally:
@@ -373,3 +373,4 @@ if __name__ == '__main__':
             scheduler.shutdown()
         for light in lights:
             light.off()
+        display.close()
