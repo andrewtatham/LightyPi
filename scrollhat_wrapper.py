@@ -21,14 +21,13 @@ class ScrollHatWrapper(object):
 
     def enqueue(self, text):
         print("_enqueue text = {}".format(text))
-        q.insert(0, text)
+        self.q.insert(0, text)
 
     def _dequeue(self):
-        global status_length
         scrollphathd.clear()
-        print("len(q) = {}".format(len(q)))
+        print("len(q) = {}".format(len(self.q)))
         status = self.q.pop()
-        status_length = scrollphathd.write_string(status, x=18, y=0, font=font5x7smoothed, brightness=1.0) + 17
+        self.status_length = scrollphathd.write_string(status, x=18, y=0, font=font5x7smoothed, brightness=1.0) + 17
         scrollphathd.show()
         time.sleep(0.01)
 
