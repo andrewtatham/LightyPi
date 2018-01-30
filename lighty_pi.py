@@ -34,6 +34,7 @@ at_midnight = CronTrigger(hour=0)
 on_the_hour = CronTrigger(minute=0)
 on_the_minute = CronTrigger(minute="1-59", second=0)
 every_second = CronTrigger(second="*")
+before_morning = CronTrigger(hour=5, minute=59)
 at_morning = CronTrigger(hour=6)
 at_bedtime = CronTrigger(hour=23)
 every_fifteen_minutes = CronTrigger(minute="*/15")
@@ -202,6 +203,7 @@ class LightyPi():
 
     def at_midnight_get_sun_data(self):
         self.scheduler.add_job(func=self._get_sunset_sunrise, trigger=at_midnight)
+        self.scheduler.add_job(func=self._get_sunset_sunrise)
 
     def _get_sunset_sunrise(self):
         a = Astral()
@@ -253,11 +255,11 @@ class LightyPi():
         print('during sunrise {}'.format(self.day_factor))
 
     def _during_sunset(self):
-        self.day_factor = 1 - ((self.dusk - datetime.datetime.now().astimezone()) / (self.dusk - self.sunset))
+        self.day_factor = 1.0 - ((self.dusk - datetime.datetime.now().astimezone()) / (self.dusk - self.sunset))
         print('during sunset {}'.format(self.day_factor))
 
     def larsson_scanner(self):
-        self.scheduler.add_job(self._at_morning, at_morning)
+        self.scheduler.add_job(self._before_morning, before_morning)
         self.scheduler.add_job(self._at_bedtime, at_bedtime)
         self.scheduler.add_job(self._larsson_scanner, at_morning)
         self.scheduler.add_job(self._larsson_scanner)  # omit trigger = run at startup
@@ -266,7 +268,7 @@ class LightyPi():
         if self.blinkstick_flex:
             self.blinkstick_flex.larsson_scanner()
 
-    def _at_morning(self):
+    def _before_morning(self):
         self.lights_on()
 
     def _at_bedtime(self):
@@ -281,6 +283,7 @@ class LightyPi():
 
 if __name__ == '__main__':
     pi = LightyPi()
+    pi.at_midnight_get_sun_data()
 
     pi.larsson_scanner()
 
