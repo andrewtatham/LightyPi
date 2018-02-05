@@ -85,7 +85,7 @@ class LightyPi():
         self.blinksticks = []
         for bstick in blinksticks:
             description = bstick.get_description()
-            print(bstick.get_serial(), description)
+            logging.info(bstick.get_serial(), description)
             if description == "BlinkStick Nano":
                 self.blinkstick_nano = BlinkstickNanoWrapper()
                 self.blinksticks.append(self.blinkstick_nano)
@@ -93,21 +93,21 @@ class LightyPi():
                 self.blinkstick_flex = BlinkstickFlexWrapper()
                 self.blinksticks.append(self.blinkstick_flex)
             else:
-                print("UNKNOWN {}".format(description))
+                logging.info("UNKNOWN {}".format(description))
 
     def _init_piglow(self):
         try:
             self.piglow = piglow_wrapper.get()
-            print("piglow")
+            logging.info("piglow")
         except Exception as ex:
             logging.warning(ex)
 
     def aws_callback(self, client, userdata, message):
-        print("Received a new message: ")
-        print(message.payload)
-        print("from topic: ")
-        print(message.topic)
-        print("--------------\n\n")
+        logging.info("Received a new message: ")
+        logging.info(message.payload)
+        logging.info("from topic: ")
+        logging.info(message.topic)
+        logging.info("--------------\n\n")
         if message.topic == BUTTON_TOPIC:
             event = AwsIotButtonEvent(message.payload)
             if event.is_single:
@@ -115,7 +115,7 @@ class LightyPi():
                     self.blinkstick_flex.hello()
 
     def cheerlights_callback(self, hex):
-        print("cheerlights {}".format(hex))
+        logging.info("cheerlights {}".format(hex))
         r, g, b = colour.web2rgb(hex)
         h, s, v = colorsys.rgb_to_hsv(r, g, b)
         if self.hue:
@@ -127,14 +127,14 @@ class LightyPi():
         g = int(g * 255)
         b = int(b * 255)
         rgb = (r, g, b)
-        print("cheerlights {}".format(rgb))
+        logging.info("cheerlights {}".format(rgb))
         if self.blinkstick_flex:
             self.blinkstick_flex.push_show(rgb)
         if self.blinkstick_nano:
             self.blinkstick_nano.push_show(rgb)
 
     def shutdown(self):
-        print("shutdown")
+        logging.info("shutdown")
         if self.scheduler:
             self.scheduler.shutdown()
         if self.aws:
@@ -211,7 +211,7 @@ class LightyPi():
         today = datetime.date.today()
         self._today_sun_data = leeds.sun(date=today, local=True)
         self.timezone = leeds.timezone
-        pprint.pprint(self._today_sun_data)
+        logging.info(self._today_sun_data)
 
         self.dawn = self._today_sun_data['dawn']
         self.sunrise = self._today_sun_data['sunrise']
@@ -236,27 +236,27 @@ class LightyPi():
 
     def _at_dawn(self):
         self.day_factor = 0
-        print('dawn')
+        logging.info('dawn')
 
     def _at_sunrise(self):
         self.day_factor = 1
-        print('dawn')
+        logging.info('dawn')
 
     def _at_sunset(self):
         self.day_factor = 1
-        print('sunset')
+        logging.info('sunset')
 
     def _at_dusk(self):
         self.day_factor = 0
-        print('dusk')
+        logging.info('dusk')
 
     def _during_sunrise(self):
         self.day_factor = (self.sunrise - datetime.datetime.now().astimezone()) / (self.sunrise - self.dawn)
-        print('during sunrise {}'.format(self.day_factor))
+        logging.info('during sunrise {}'.format(self.day_factor))
 
     def _during_sunset(self):
         self.day_factor = 1.0 - ((self.dusk - datetime.datetime.now().astimezone()) / (self.dusk - self.sunset))
-        print('during sunset {}'.format(self.day_factor))
+        logging.info('during sunset {}'.format(self.day_factor))
 
     def larsson_scanner(self):
         self.scheduler.add_job(self._before_morning, before_morning)
@@ -266,6 +266,7 @@ class LightyPi():
 
     def _larsson_scanner(self):
         if self.blinkstick_flex:
+            self.lights_on()
             self.blinkstick_flex.larsson_scanner()
 
     def _before_morning(self):
