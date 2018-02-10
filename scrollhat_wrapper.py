@@ -1,14 +1,25 @@
 import datetime
-import scrollphathd
+import platform
 import time
-from scrollphathd.fonts import font5x7smoothed
 import logging
 
 logging.basicConfig()
 
-scrollphathd.rotate(degrees=180)
-scrollphathd.clear()
-scrollphathd.show()
+available = False
+is_linux = platform.platform().startswith('Linux')
+if is_linux:
+    try:
+        import scrollphathd
+        from scrollphathd.fonts import font5x7smoothed
+        available = True
+    except IOError as e:
+        logging.warning(e.message)
+        logging.info("scrollphathd not available")
+
+if available:
+    scrollphathd.rotate(degrees=180)
+    scrollphathd.clear()
+    scrollphathd.show()
 
 
 class ScrollHatWrapper(object):
