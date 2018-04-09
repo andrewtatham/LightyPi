@@ -56,6 +56,7 @@ class LightyPi():
         self.scheduler = BlockingScheduler()
         self.is_linux = platform.platform().startswith('Linux')
         self._initialize()
+        self.day_factor = 1.0
 
     def _initialize(self):
         self._init_logging()
@@ -223,8 +224,8 @@ class LightyPi():
         at_sunset = _get_cron_trigger_for_datetime(self.sunset)
         at_dusk = _get_cron_trigger_for_datetime(self.dusk)
 
-        during_sunrise = IntervalTrigger(seconds=15, start_date=self.dawn, end_date=self.sunrise)
-        during_sunset = IntervalTrigger(seconds=15, start_date=self.sunset, end_date=self.dusk)
+        during_sunrise = IntervalTrigger(seconds=5, start_date=self.dawn, end_date=self.sunrise)
+        during_sunset = IntervalTrigger(seconds=5, start_date=self.sunset, end_date=self.dusk)
 
         self.scheduler.add_job(func=self._at_dawn, trigger=at_dawn)
         self.scheduler.add_job(func=self._during_sunrise, trigger=during_sunrise)
@@ -235,28 +236,37 @@ class LightyPi():
         self.scheduler.add_job(func=self._at_dusk, trigger=at_dusk)
 
     def _at_dawn(self):
-        self.day_factor = 0
+        day_factor = 0.0
+        self.set_day_factor(day_factor)
         logging.info('dawn')
 
     def _at_sunrise(self):
-        self.day_factor = 1
+        day_factor = 1.0
+        self.set_day_factor(day_factor)
         logging.info('dawn')
 
     def _at_sunset(self):
-        self.day_factor = 1
+        day_factor = 1.0
+        self.set_day_factor(day_factor)
         logging.info('sunset')
 
     def _at_dusk(self):
-        self.day_factor = 0
+        day_factor = 0.0
+        self.set_day_factor(day_factor)
         logging.info('dusk')
 
     def _during_sunrise(self):
-        self.day_factor = (self.sunrise - datetime.datetime.now().astimezone()) / (self.sunrise - self.dawn)
-        logging.info('during sunrise {}'.format(self.day_factor))
+        day_factor = (self.sunrise - datetime.datetime.now().astimezone()) / (self.sunrise - self.dawn)
+        self.set_day_factor(day_factor)
 
     def _during_sunset(self):
-        self.day_factor = 1.0 - ((self.dusk - datetime.datetime.now().astimezone()) / (self.dusk - self.sunset))
-        logging.info('during sunset {}'.format(self.day_factor))
+        day_factor = 1.0 - ((self.dusk - datetime.datetime.now().astimezone()) / (self.dusk - self.sunset))
+        self.set_day_factor(day_factor)
+
+    def set_day_factor(self, day_factor):
+        logging.info('day factor: {}'.format(day_factor))
+        self.day_factor = day_factor
+        self.blinkstick_flex.set_day_factor(day_factor)
 
     def larsson_scanner(self):
         self.scheduler.add_job(self._before_morning, before_morning)
@@ -266,6 +276,7 @@ class LightyPi():
 
     def _larsson_scanner(self):
         if self.blinkstick_flex:
+            self.blinkstick_flex.set_day_factor(self.day_factor)
             self.lights_on()
             self.blinkstick_flex.larsson_scanner()
 
