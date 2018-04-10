@@ -42,6 +42,8 @@ at_bedtime = CronTrigger(hour=23)
 every_fifteen_minutes = CronTrigger(minute="*/15")
 
 tz = pytz.timezone("Europe/London")
+
+
 def _get_cron_trigger_for_datetime(dt):
     return CronTrigger(year=dt.year, month=dt.month, day=dt.day, hour=dt.hour, minute=dt.minute, second=dt.second)
 
@@ -258,11 +260,15 @@ class LightyPi():
         logging.info('dusk')
 
     def _during_sunrise(self):
-        day_factor = (self.sunrise - datetime.datetime.now(tz)) / (self.sunrise - self.dawn)
+        x = self.sunrise - datetime.datetime.now(tz)
+        y = self.sunrise - self.dawn
+        day_factor = x.total_seconds() / y.total_seconds()
         self.set_day_factor(day_factor)
 
     def _during_sunset(self):
-        day_factor = 1.0 - ((self.dusk - datetime.datetime.now(tz)) / (self.dusk - self.sunset))
+        x = self.dusk - datetime.datetime.now(tz)
+        y = self.dusk - self.sunset
+        day_factor = 1.0 - (x.total_seconds() / y.total_seconds())
         self.set_day_factor(day_factor)
 
     def set_day_factor(self, day_factor):
