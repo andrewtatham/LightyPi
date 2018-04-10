@@ -4,6 +4,7 @@ import logging
 import platform
 
 import colour
+import pytz
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
@@ -40,7 +41,7 @@ at_morning = CronTrigger(hour=6)
 at_bedtime = CronTrigger(hour=23)
 every_fifteen_minutes = CronTrigger(minute="*/15")
 
-
+tz = pytz.timezone("Europe/London")
 def _get_cron_trigger_for_datetime(dt):
     return CronTrigger(year=dt.year, month=dt.month, day=dt.day, hour=dt.hour, minute=dt.minute, second=dt.second)
 
@@ -257,11 +258,11 @@ class LightyPi():
         logging.info('dusk')
 
     def _during_sunrise(self):
-        day_factor = (self.sunrise - datetime.datetime.now()) / (self.sunrise - self.dawn)
+        day_factor = (self.sunrise - datetime.datetime.now(tz)) / (self.sunrise - self.dawn)
         self.set_day_factor(day_factor)
 
     def _during_sunset(self):
-        day_factor = 1.0 - ((self.dusk - datetime.datetime.now()) / (self.dusk - self.sunset))
+        day_factor = 1.0 - ((self.dusk - datetime.datetime.now(tz)) / (self.dusk - self.sunset))
         self.set_day_factor(day_factor)
 
     def set_day_factor(self, day_factor):
