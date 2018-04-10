@@ -257,11 +257,11 @@ class LightyPi():
         logging.info('dusk')
 
     def _during_sunrise(self):
-        day_factor = (self.sunrise - datetime.datetime.now().astimezone()) / (self.sunrise - self.dawn)
+        day_factor = (self.sunrise - datetime.datetime.now()) / (self.sunrise - self.dawn)
         self.set_day_factor(day_factor)
 
     def _during_sunset(self):
-        day_factor = 1.0 - ((self.dusk - datetime.datetime.now().astimezone()) / (self.dusk - self.sunset))
+        day_factor = 1.0 - ((self.dusk - datetime.datetime.now()) / (self.dusk - self.sunset))
         self.set_day_factor(day_factor)
 
     def set_day_factor(self, day_factor):
