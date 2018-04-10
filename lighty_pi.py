@@ -1,18 +1,19 @@
+import colorsys
 import datetime
-import pprint
-import time
 import logging
 import platform
-import colorsys
-import colour
 
+import colour
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 from blinkstick import blinkstick
 
-import sportball
-import train_check
+try:
+    import sportball
+except IOError as ex:
+    print(ex)
+
 import piglow_wrapper
 from aws_wrapper import AwsClient, AwsIotButtonEvent
 from blinkstick_flex_wrapper import BlinkstickFlexWrapper
