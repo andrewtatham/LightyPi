@@ -1,3 +1,4 @@
+Pillow
 pytz
 scrollphathd
 feedparser
