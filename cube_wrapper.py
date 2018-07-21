@@ -1,6 +1,5 @@
 import time
-
-from neopixel import *
+import neopixel
 
 # LED strip configuration:
 LED_COUNT = 250  # Number of LED pixels.
@@ -16,7 +15,7 @@ LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 class Cube(object):
     def __init__(self, n):
         self.n = n
-        self.strip = Adafruit_NeoPixel(
+        self.strip = neopixel.Adafruit_NeoPixel(
             LED_COUNT, LED_PIN, LED_FREQ_HZ,
             LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
         self.strip.begin()
@@ -59,7 +58,11 @@ class Cube(object):
 
     def set_rgb(self, xyz, rgb):
         led = self._unmap(xyz)
-        self.strip.setPixelColor(led, rgb)
+        r = rgb[0]
+        g = rgb[1]
+        b = rgb[2]
+        colour = neopixel.Color(r, g, b)
+        self.strip.setPixelColor(led, colour)
 
     def show(self, sleep=0.1):
         self.strip.show()
