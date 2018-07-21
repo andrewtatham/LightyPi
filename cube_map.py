@@ -24,7 +24,7 @@ class CubeMap(object):
             x = layer_led % self.n
         else:
             x = ((self.n - 1) - (layer_led % self.n)) % self.n
-        print("a_side: z: {}, layer_led:{}, x: {}, y:{}, led:{}".format(z, layer_led, x, y, led))
+        # print("a_side: z: {}, layer_led:{}, x: {}, y:{}, led:{}".format(z, layer_led, x, y, led))
         self.map[x][y][z] = led
 
     def _build_b_side_map(self, z, led):
@@ -34,7 +34,7 @@ class CubeMap(object):
             y = ((self.n - 1) - (layer_led % self.n)) % self.n
         else:
             y = layer_led % self.n
-        print("b_side: z: {}, layer_led:{}, x: {}, y:{}, led:{}".format(z, layer_led, x, y, led))
+        # print("b_side: z: {}, layer_led:{}, x: {}, y:{}, led:{}".format(z, layer_led, x, y, led))
         self.map[x][y][z] = led
 
     def unmap(self, xyz):
@@ -42,5 +42,5 @@ class CubeMap(object):
         y = xyz[1]
         z = xyz[2]
         led = self.map[x][y][z]
-        print("[{}] = {}".format(xyz, led))
+        # print("[{}] = {}".format(xyz, led))
         return led

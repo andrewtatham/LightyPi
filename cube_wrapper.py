@@ -43,14 +43,18 @@ class Cube(object):
                     self.set_rgb(xyz, rgb)
             if by:
                 self.show()
+                time.sleep(0.2)
         if not by:
             self.show()
 
     def hello(self):
         b = 255
         self.set_all_rgb((b, 0, 0), "x")
+        time.sleep(1)
         self.set_all_rgb((0, b, 0), "y")
+        time.sleep(1)
         self.set_all_rgb((0, 0, b), "z")
+        time.sleep(1)
         self.off()
 
     def off(self):
