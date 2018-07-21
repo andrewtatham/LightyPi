@@ -27,19 +27,30 @@ class Cube(object):
         self.map = CubeMap(5)
         self.hello()
 
-    def set_all_rgb(self, rgb):
-        for x in range(self.n):
-            for y in range(self.n):
-                for z in range(self.n):
-                    xyz = (x, y, z)
+    def set_all_rgb(self, rgb, by=None):
+        bys = {
+            "x": lambda ijk: (i, j, k),
+            "y": lambda ijk: (k, i, j),
+            "z": lambda ijk: (k, j, i),
+        }
+        for i in range(self.n):
+            for j in range(self.n):
+                for k in range(self.n):
+                    if by:
+                        xyz = bys[by]
+                    else:
+                        xyz = (i, j, k)
                     self.set_rgb(xyz, rgb)
-                    self.show()
+            if by:
+                self.show()
+        if not by:
+            self.show()
 
     def hello(self):
         b = 255
-        self.set_all_rgb((b, 0, 0))
-        self.set_all_rgb((0, b, 0))
-        self.set_all_rgb((0, 0, b))
+        self.set_all_rgb((b, 0, 0), "x")
+        self.set_all_rgb((0, b, 0), "y")
+        self.set_all_rgb((0, 0, b), "z")
         self.off()
 
     def off(self):
@@ -55,6 +66,3 @@ class Cube(object):
 
     def show(self):
         self.strip.show()
-
-
-
