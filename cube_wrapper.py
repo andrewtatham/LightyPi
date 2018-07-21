@@ -53,8 +53,8 @@ class Cube(object):
         colour = neopixel.Color(r, g, b)
         self.strip.setPixelColor(led, colour)
 
-    def show(self, sleep=0.1):
+    def show(self):
         self.strip.show()
-        time.sleep(sleep)
+
 
 
