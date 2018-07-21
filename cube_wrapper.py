@@ -37,7 +37,7 @@ class Cube(object):
             for j in range(self.n):
                 for k in range(self.n):
                     if by:
-                        xyz = bys[by]
+                        xyz = bys[by]((i, j, k))
                     else:
                         xyz = (i, j, k)
                     self.set_rgb(xyz, rgb)
