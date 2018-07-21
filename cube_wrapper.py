@@ -14,7 +14,7 @@ LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 class Cube(object):
     def __init__(self, n):
         self.n = n
-        led_count = n*n*n
+        led_count = n * n * n
         self.strip = neopixel.Adafruit_NeoPixel(
             led_count, LED_PIN, LED_FREQ_HZ,
             LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)

@@ -3,6 +3,14 @@ import platform
 import random
 import time
 
+
+def get_random_colour():
+    r = random.randint(0, 255)
+    g = random.randint(0, 255)
+    b = random.randint(0, 255)
+    return r, g, b
+
+
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
@@ -24,31 +32,28 @@ else:
     cube = cube_visualiser.Cube(n)
 
 run = True
-i = 0
-while run:
-    try:
-        for x in range(n):
-            for y in range(n):
-                for z in range(n):
-                    r = random.randint(0, 255)
-                    g = random.randint(0, 255)
-                    b = random.randint(0, 255)
+t = 0
 
-                    rgb = (r, g, b)
-                    xyz = (x, y, z)
+try:
+    while run:
+        for i in range(n):
+            rgb = get_random_colour()
+            for j in range(n):
+                for k in range(n):
+                    xyz = (i, j, k)
                     cube.set_rgb(xyz, rgb)
         cube.show()
 
         if is_linux:
             time.sleep(1)
         else:
-            i += 1
-            if i > 10:
+            t += 1
+            if t > 10:
                 run = False
-    except KeyboardInterrupt:
-        pass
-    finally:
-        cube.off()
+except KeyboardInterrupt:
+    pass
+finally:
+    cube.off()
 
 if not is_linux:
     cube.show_me_what_you_got()
