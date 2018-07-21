@@ -26,24 +26,29 @@ else:
 run = True
 i = 0
 while run:
-    for x in range(n):
-        for y in range(n):
-            for z in range(n):
-                r = random.randint(0, 255)
-                g = random.randint(0, 255)
-                b = random.randint(0, 255)
+    try:
+        for x in range(n):
+            for y in range(n):
+                for z in range(n):
+                    r = random.randint(0, 255)
+                    g = random.randint(0, 255)
+                    b = random.randint(0, 255)
 
-                rgb = (r, g, b)
-                xyz = (x, y, z)
-                cube.set_rgb(xyz, rgb)
-    cube.show()
+                    rgb = (r, g, b)
+                    xyz = (x, y, z)
+                    cube.set_rgb(xyz, rgb)
+        cube.show()
 
-    if is_linux:
-        time.sleep(1)
-    else:
-        i += 1
-        if i > 10:
-            run = False
+        if is_linux:
+            time.sleep(1)
+        else:
+            i += 1
+            if i > 10:
+                run = False
+    except KeyboardInterrupt:
+        pass
+    finally:
+        cube.off()
 
 if not is_linux:
     cube.show_me_what_you_got()

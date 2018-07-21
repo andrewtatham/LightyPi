@@ -2,7 +2,6 @@ import time
 import neopixel
 
 # LED strip configuration:
-LED_COUNT = 250  # Number of LED pixels.
 LED_PIN = 18  # GPIO pin connected to the pixels (18 uses PWM!).
 # LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
 LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
@@ -15,8 +14,9 @@ LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 class Cube(object):
     def __init__(self, n):
         self.n = n
+        led_count = n*n*n
         self.strip = neopixel.Adafruit_NeoPixel(
-            LED_COUNT, LED_PIN, LED_FREQ_HZ,
+            led_count, LED_PIN, LED_FREQ_HZ,
             LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
         self.strip.begin()
         self.map = None
@@ -50,10 +50,13 @@ class Cube(object):
                     self.show()
 
     def hello(self):
-        b = 8
+        b = 255
         self.set_all_rgb((b, 0, 0))
         self.set_all_rgb((0, b, 0))
         self.set_all_rgb((0, 0, b))
+        self.off()
+
+    def off(self):
         self.set_all_rgb((0, 0, 0))
 
     def set_rgb(self, xyz, rgb):
