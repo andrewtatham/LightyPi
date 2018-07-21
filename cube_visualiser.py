@@ -60,6 +60,9 @@ class Cube(object):
         self.paths.append(path)
         self.image_number += 1
 
+    def off(self):
+        pass
+
     def show_me_what_you_got(self):
 
         self.root = tkinter.Tk()
