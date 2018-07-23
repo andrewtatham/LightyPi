@@ -24,41 +24,7 @@ class Cube(object):
             led_count, LED_PIN, LED_FREQ_HZ,
             LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
         self.strip.begin()
-        self.map = CubeMap(5)
-        self.hello()
-
-    def set_all_rgb(self, rgb, by=None):
-        bys = {
-            "x": lambda ijk: (i, j, k),
-            "y": lambda ijk: (k, i, j),
-            "z": lambda ijk: (k, j, i),
-        }
-        for i in range(self.n):
-            for j in range(self.n):
-                for k in range(self.n):
-                    if by:
-                        xyz = bys[by]((i, j, k))
-                    else:
-                        xyz = (i, j, k)
-                    self.set_rgb(xyz, rgb)
-            if by:
-                self.show()
-                time.sleep(0.2)
-        if not by:
-            self.show()
-
-    def hello(self):
-        b = 255
-        self.set_all_rgb((b, 0, 0), "x")
-        time.sleep(1)
-        self.set_all_rgb((0, b, 0), "y")
-        time.sleep(1)
-        self.set_all_rgb((0, 0, b), "z")
-        time.sleep(1)
-        self.off()
-
-    def off(self):
-        self.set_all_rgb((0, 0, 0))
+        self.map = CubeMap(n)
 
     def set_rgb(self, xyz, rgb):
         led = self.map.unmap(xyz)
