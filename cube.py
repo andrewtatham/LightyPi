@@ -1,7 +1,9 @@
+import colorsys
 import logging
 import platform
 import random
 import time
+import math
 
 
 def get_random_colour():
@@ -37,29 +39,81 @@ else:
     cube = cube_visualiser.Cube(n)
 
 
+def hello():
+    b = 255
+    set_all_rgb((b, 0, 0), "x")
+    sleep(2)
+    set_all_rgb((0, b, 0), "y")
+    sleep(2)
+    set_all_rgb((0, 0, b), "z")
+    sleep(2)
+    off()
+
+
+def rgb_cube():
+    bright = 255
+    for x in range(n):
+        for y in range(n):
+            for z in range(n):
+                r = int(x * bright / n)
+                g = int(y * bright / n)
+                b = int(z * bright / n)
+                cube.set_rgb((x, y, z), (r, g, b))
+    cube.show()
+
+
+def hsv_cube():
+    for x in range(n):
+        for y in range(n):
+            for z in range(n):
+                h = 1.0 * x / n
+                s = 1.0 * y / n
+                v = 255 * z / n
+                rgb = hsv_to_rgb((h, s, v))
+                cube.set_rgb((x, y, z), rgb)
+    cube.show()
+
+
+def rainbow_cube():
+    s = 1.0
+    v = 255
+    for x in range(n):
+        h = 1.0 * x / n
+        for y in range(n):
+            for z in range(n):
+                rgb = hsv_to_rgb((h, s, v))
+                cube.set_rgb((x, y, z), rgb)
+    cube.show()
+
+
+def off():
+    set_all_rgb((0, 0, 0))
+
+
 def sleep(secs):
     if not is_viz:
         time.sleep(secs)
 
 
-def hello():
-    b = 255
-    set_all_rgb((b, 0, 0), "x")
-    sleep(1)
-    set_all_rgb((0, b, 0), "y")
-    sleep(1)
-    set_all_rgb((0, 0, b), "z")
-    sleep(1)
+def off_sleep(secs):
     off()
-    sleep(1)
-    set_all_rgb((b, b, b))
-    sleep(0.1)
-    off()
-    sleep(1)
+    sleep(secs)
 
 
-def off():
-    set_all_rgb((0, 0, 0))
+def show_sleep(secs):
+    cube.show()
+    sleep(secs)
+
+
+def hsv_to_rgb(hsv):
+    h = hsv[0]
+    s = hsv[1]
+    v = hsv[2]
+    rgb = colorsys.hsv_to_rgb(h, s, v)
+    r = int(rgb[0])
+    g = int(rgb[1])
+    b = int(rgb[2])
+    return r, g, b
 
 
 def set_all_rgb(rgb, by=None):
@@ -87,23 +141,22 @@ try:
     run = True
     t = 0
 
-    hello()
-
     while run:
-        for i in range(n):
-            rgb = get_random_colour()
-            for j in range(n):
-                for k in range(n):
-                    xyz = (i, j, k)
-                    cube.set_rgb(xyz, rgb)
-        cube.show()
+        # if not is_viz:
+        hello()
+        off_sleep(30)
+        rgb_cube()
+        off_sleep(30)
+        hsv_cube()
+        off_sleep(30)
+        rainbow_cube()
+        off_sleep(30)
 
-        if not is_viz:
-            sleep(1)
-        else:
+        if is_viz:
             t += 1
             if t > 10:
                 run = False
+
 except KeyboardInterrupt:
     pass
 finally:
