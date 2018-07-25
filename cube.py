@@ -142,6 +142,8 @@ def set_all_rgb(rgb, by=None):
     if not by:
         cube.show()
 
+on_secs = 12
+off_secs = 1
 
 try:
     run = True
@@ -150,20 +152,20 @@ try:
     while run:
         # if not is_viz:
         hello()
-        sleep_off_sleep(5, 30)
+        sleep_off_sleep(on_secs, off_secs)
 
         rgb_cube()
-        sleep_off_sleep(5, 30)
+        sleep_off_sleep(on_secs, off_secs)
 
         hsv_cube()
-        sleep_off_sleep(5, 30)
+        sleep_off_sleep(on_secs, off_secs)
 
         rainbow_cube()
-        sleep_off_sleep(5, 30)
+        sleep_off_sleep(on_secs, off_secs)
 
         if is_viz:
             t += 1
-            if t > 10:
+            if t > 2:
                 run = False
 
 except KeyboardInterrupt:
