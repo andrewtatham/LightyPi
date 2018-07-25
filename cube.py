@@ -142,6 +142,7 @@ def set_all_rgb(rgb, by=None):
     if not by:
         cube.show()
 
+
 on_secs = 12
 off_secs = 1
 
