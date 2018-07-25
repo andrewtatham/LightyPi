@@ -95,6 +95,12 @@ def sleep(secs):
         time.sleep(secs)
 
 
+def sleep_off_sleep(secs_before, secs_after):
+    sleep(secs_before)
+    off()
+    sleep(secs_after)
+
+
 def off_sleep(secs):
     off()
     sleep(secs)
@@ -144,13 +150,16 @@ try:
     while run:
         # if not is_viz:
         hello()
-        off_sleep(30)
+        sleep_off_sleep(5, 30)
+
         rgb_cube()
-        off_sleep(30)
+        sleep_off_sleep(5, 30)
+
         hsv_cube()
-        off_sleep(30)
+        sleep_off_sleep(5, 30)
+
         rainbow_cube()
-        off_sleep(30)
+        sleep_off_sleep(5, 30)
 
         if is_viz:
             t += 1
