@@ -3,6 +3,7 @@ import time
 import neopixel
 
 # LED strip configuration:
+from cube_base import CubeBase
 from cube_map import CubeMap
 
 LED_PIN = 18  # GPIO pin connected to the pixels (18 uses PWM!).
@@ -14,12 +15,10 @@ LED_INVERT = False  # True to invert the signal (when using NPN transistor level
 LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
 
-class Cube(object):
+class Cube(CubeBase):
     def __init__(self, n):
         self.n = n
-        self.n2 = n * n
-        self.n3 = n * n * n
-        led_count = self.n3
+        led_count = n * n * n
         self.strip = neopixel.Adafruit_NeoPixel(
             led_count, LED_PIN, LED_FREQ_HZ,
             LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)

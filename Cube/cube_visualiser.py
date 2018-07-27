@@ -5,6 +5,8 @@ import tkinter
 
 from PIL import Image, ImageDraw, ImageTk
 
+from cube_base import CubeBase
+
 
 def ensure_directory_exists_and_is_empty(folder):
     if os.path.exists(folder):
@@ -13,7 +15,7 @@ def ensure_directory_exists_and_is_empty(folder):
         os.makedirs(folder)
 
 
-class Cube(object):
+class Cube(CubeBase):
     def __init__(self, n):
         self.n = n
         self._buffer = [[[(0, 0, 0) for x in range(n)] for y in range(n)] for z in range(n)]
@@ -33,7 +35,7 @@ class Cube(object):
         # dir
         self.image_number = 0
         self.paths = []
-        self.folder = "cube" + os.sep
+        self.folder = "tmp" + os.sep
         ensure_directory_exists_and_is_empty(self.folder)
 
     def set_rgb(self, xyz, rgb):

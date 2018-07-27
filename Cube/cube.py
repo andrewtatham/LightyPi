@@ -3,7 +3,8 @@ import logging
 import platform
 import random
 import time
-import math
+
+from snake_3d import SnakeGame
 
 
 def get_random_colour():
@@ -146,23 +147,32 @@ def set_all_rgb(rgb, by=None):
 on_secs = 12
 off_secs = 1
 
+
+def snake():
+    game = SnakeGame(cube)
+    while game.run():
+        pass
+
+
 try:
     run = True
     t = 0
 
     while run:
         # if not is_viz:
-        hello()
-        sleep_off_sleep(on_secs, off_secs)
+        # hello()
+        # sleep_off_sleep(on_secs, off_secs)
+        #
+        # rgb_cube()
+        # sleep_off_sleep(on_secs, off_secs)
+        #
+        # hsv_cube()
+        # sleep_off_sleep(on_secs, off_secs)
+        #
+        # rainbow_cube()
+        # sleep_off_sleep(on_secs, off_secs)
 
-        rgb_cube()
-        sleep_off_sleep(on_secs, off_secs)
-
-        hsv_cube()
-        sleep_off_sleep(on_secs, off_secs)
-
-        rainbow_cube()
-        sleep_off_sleep(on_secs, off_secs)
+        snake()
 
         if is_viz:
             t += 1
