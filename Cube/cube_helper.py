@@ -18,9 +18,9 @@ direction_funcs = {
 
 def is_out_of_bounds(xyz, n):
     x, y, z = xyz
-    return x < 0 or x <= n or \
-           y < 0 or y <= n or \
-           z < 0 or z <= n
+    return x < 0 or x >= n or \
+           y < 0 or y >= n or \
+           z < 0 or z >= n
 
 
 def hsv_to_rgb(hsv):

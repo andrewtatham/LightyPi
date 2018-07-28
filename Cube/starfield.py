@@ -57,7 +57,8 @@ class StarField(object):
             for dead_star in dead_stars:
                 self.stars.remove(dead_star)
         for _ in range(2):
-            self.stars.append(self.factory.create())
+            s = self.factory.create()
+            self.stars.append(s)
         for star in self.stars:
             star.draw()
         self.cube.show()
