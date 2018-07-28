@@ -8,14 +8,6 @@ import cube_helper
 from snake_3d import SnakeGame
 from starfield import StarField
 
-
-def get_random_colour():
-    r = random.randint(0, 255)
-    g = random.randint(0, 255)
-    b = random.randint(0, 255)
-    return r, g, b
-
-
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
@@ -145,7 +137,8 @@ def starfield():
     game = StarField(cube)
     for _ in range(100):
         game.run()
-        sleep(0.25)
+        sleep(0.1)
+    off()
 
 
 try:

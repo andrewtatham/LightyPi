@@ -55,7 +55,7 @@ class StarField(object):
         if any(dead_stars):
             for dead_star in dead_stars:
                 self.stars.remove(dead_star)
-        for _ in range(2):
+        if random.randint(0, 1) == 0:
             s = self.factory.create()
             self.stars.append(s)
         for star in self.stars:

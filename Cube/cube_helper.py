@@ -2,6 +2,15 @@ import colorsys
 import random
 
 rgb_black = (0, 0, 0)
+
+
+def get_random_colour():
+    r = random.randint(0, 255)
+    g = random.randint(0, 255)
+    b = random.randint(0, 255)
+    return r, g, b
+
+
 bys = {
     "x": lambda ijk: (ijk[0], ijk[1], ijk[2]),
     "y": lambda ijk: (ijk[2], ijk[0], ijk[1]),
