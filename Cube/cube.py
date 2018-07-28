@@ -4,7 +4,9 @@ import platform
 import random
 import time
 
+import cube_helper
 from snake_3d import SnakeGame
+from starfield import StarField
 
 
 def get_random_colour():
@@ -70,7 +72,7 @@ def hsv_cube():
                 h = 1.0 * x / n
                 s = 1.0 * y / n
                 v = 255 * z / n
-                rgb = hsv_to_rgb((h, s, v))
+                rgb = cube_helper.hsv_to_rgb((h, s, v))
                 cube.set_rgb((x, y, z), rgb)
     cube.show()
 
@@ -82,7 +84,7 @@ def rainbow_cube():
         h = 1.0 * x / n
         for y in range(n):
             for z in range(n):
-                rgb = hsv_to_rgb((h, s, v))
+                rgb = cube_helper.hsv_to_rgb((h, s, v))
                 cube.set_rgb((x, y, z), rgb)
     cube.show()
 
@@ -112,30 +114,15 @@ def show_sleep(secs):
     sleep(secs)
 
 
-def hsv_to_rgb(hsv):
-    h = hsv[0]
-    s = hsv[1]
-    v = hsv[2]
-    rgb = colorsys.hsv_to_rgb(h, s, v)
-    r = int(rgb[0])
-    g = int(rgb[1])
-    b = int(rgb[2])
-    return r, g, b
-
-
 def set_all_rgb(rgb, by=None):
-    bys = {
-        "x": lambda ijk: (i, j, k),
-        "y": lambda ijk: (k, i, j),
-        "z": lambda ijk: (j, k, i),
-    }
+    if not by:
+        by = "x"
+    map_func = cube_helper.bys[by]
+
     for i in range(n):
         for j in range(n):
             for k in range(n):
-                if by:
-                    xyz = bys[by]((i, j, k))
-                else:
-                    xyz = (i, j, k)
+                xyz = map_func((i, j, k))
                 cube.set_rgb(xyz, rgb)
         if by:
             cube.show()
@@ -152,6 +139,13 @@ def snake():
     game = SnakeGame(cube)
     while game.run():
         pass
+
+
+def starfield():
+    game = StarField(cube)
+    for _ in range(100):
+        game.run()
+        sleep(0.25)
 
 
 try:
@@ -173,6 +167,8 @@ try:
         # sleep_off_sleep(on_secs, off_secs)
 
         snake()
+
+        starfield()
 
         if is_viz:
             t += 1
