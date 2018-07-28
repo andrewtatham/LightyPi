@@ -1,4 +1,5 @@
 import colorsys
+import random
 
 rgb_black = (0, 0, 0)
 bys = {
@@ -13,6 +14,14 @@ direction_funcs = {
     "y-": lambda xyz: (xyz[0], xyz[1] - 1, xyz[2]),
     "z+": lambda xyz: (xyz[0], xyz[1], xyz[2] + 1),
     "z-": lambda xyz: (xyz[0], xyz[1], xyz[2] - 1),
+}
+start_position_funcs = {
+    "x+": lambda n: (0, random.randint(0, n - 1), random.randint(0, n - 1)),
+    "x-": lambda n: (n - 1, random.randint(0, n - 1), random.randint(0, n - 1)),
+    "y+": lambda n: (random.randint(0, n - 1), 0, random.randint(0, n - 1)),
+    "y-": lambda n: (random.randint(0, n - 1), n - 1, random.randint(0, n - 1)),
+    "z+": lambda n: (random.randint(0, n - 1), random.randint(0, n - 1), 0),
+    "z-": lambda n: (random.randint(0, n - 1), random.randint(0, n - 1), n - 1),
 }
 
 

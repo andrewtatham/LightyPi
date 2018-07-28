@@ -116,7 +116,7 @@ def show_sleep(secs):
 
 def set_all_rgb(rgb, by=None):
     if not by:
-        by = "x"
+        by = "z"
     map_func = cube_helper.bys[by]
 
     for i in range(n):
