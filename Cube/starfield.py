@@ -32,7 +32,7 @@ class StarFactory(object):
         ])
         direction = random.choice("xyz") + random.choice("+-")
         self.direction_func = cube_helper.direction_funcs[direction]
-        self.start_position_func = cube_helper.start_position_funcs[direction]
+        self.start_position_func = cube_helper.edge_start_position_funcs[direction]
 
     def create(self):
         xyz = self.start_position_func(self.cube.n)

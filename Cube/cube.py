@@ -5,6 +5,7 @@ import random
 import time
 
 import cube_helper
+from bouncy_ball import BouncyBalls
 from snake_3d import SnakeGame
 from starfield import StarField
 
@@ -141,6 +142,13 @@ def starfield():
     off()
 
 
+def bouncy_ball():
+    game = BouncyBalls(cube)
+    for _ in range(100):
+        game.run()
+        sleep(0.05)
+
+
 try:
     run = True
     t = 0
@@ -158,6 +166,8 @@ try:
         #
         # rainbow_cube()
         # sleep_off_sleep(on_secs, off_secs)
+
+        bouncy_ball()
 
         snake()
 
