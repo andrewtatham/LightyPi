@@ -46,7 +46,6 @@ class Cube(CubeBase):
         return origin + tuple(map(sum, zip(origin, size)))
 
     def show(self):
-
         for pixel_x in range(self.n):
             for pixel_y in range(self.n):
                 for pixel_z in range(self.n):

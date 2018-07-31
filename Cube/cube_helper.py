@@ -39,7 +39,14 @@ def start_position(n):
 
 
 def velocity_xyz():
-    return random.randint(-1, +1), random.randint(-1, +1), random.randint(-1, +1)
+    x, y, z = 0, 0, 0
+    while x == 0:
+        x = random.randint(-1, +1)
+    while y == 0:
+        y = random.randint(-1, +1)
+    while z == 0:
+        z = random.randint(-1, +1)
+    return x, y, z
 
 
 def is_at_edge(xyz, n):
@@ -71,24 +78,24 @@ def bounce(xyz, velocity_xyz, n):
     x, y, z = xyz
     vx, vy, vz = velocity_xyz
 
-    if x <= 0:
+    if x <= 0 and vx < 0:
         x = 0
         vx = -vx
-    if x >= n - 1:
+    if x >= n - 1 and vx > 0:
         x = n - 1
         vx = -vx
 
-    if y <= 0:
+    if y <= 0 and vy < 0:
         y = 0
         vy = -vy
-    if y >= n - 1:
+    if y >= n - 1 and vy > 0:
         y = n - 1
         vy = -vy
 
-    if z <= 0:
+    if z <= 0 and vz < 0:
         z = 0
         vz = -vz
-    if z >= n - 1:
+    if z >= n - 1 and vz > 0:
         z = n - 1
         vz = -vz
 

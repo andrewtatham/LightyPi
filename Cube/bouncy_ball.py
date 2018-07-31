@@ -16,15 +16,11 @@ class Ball(object):
 
     def update(self):
         if cube_helper.is_at_edge(self.xyz, self.cube.n):
-            print(self.xyz, self.velocity_xyz)
+            # print("before bounce: {} + {}".format(self.xyz, self.velocity_xyz))
             self.xyz, self.velocity_xyz = cube_helper.bounce(self.xyz, self.velocity_xyz, self.cube.n)
-            print(self.xyz)
-
+            # print("after bounce: {} + {}".format(self.xyz, self.velocity_xyz))
         self.xyz = tuple(map(operator.add, self.xyz, self.velocity_xyz))
-        if cube_helper.is_at_edge(self.xyz, self.cube.n):
-            print(self.xyz, self.velocity_xyz)
-            self.xyz, self.velocity_xyz = cube_helper.bounce(self.xyz, self.velocity_xyz, self.cube.n)
-            print(self.xyz)
+        # print("updated: {}".format(self.xyz))
 
     def draw(self):
         self.cube.set_rgb(self.xyz, self.rgb)

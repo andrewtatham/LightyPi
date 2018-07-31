@@ -132,6 +132,7 @@ def snake():
     game = SnakeGame(cube)
     while game.run():
         pass
+    off()
 
 
 def starfield():
@@ -147,6 +148,7 @@ def bouncy_ball():
     for _ in range(100):
         game.run()
         sleep(0.05)
+    off()
 
 
 try:
