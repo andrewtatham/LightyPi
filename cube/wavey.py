@@ -25,8 +25,8 @@ class Wave(object):
             radians = degrees * math.pi / 180.0
             factor = 0.5 + 0.5 * math.sin(radians)
             k = int((self.cube.n - 1) * factor)
-            print("t:{} i:{} j:{} degrees:{} radians:{} factor:{} k:{}"
-                  .format(self.t, self.i, j, degrees, radians, factor, k))
+            # print("t:{} i:{} j:{} degrees:{} radians:{} factor:{} k:{}"
+            #       .format(self.t, self.i, j, degrees, radians, factor, k))
             self.segments[j] = k
 
     def draw(self):
@@ -42,11 +42,12 @@ class WaveFactory(object):
 
     def create(self, n):
         waves = []
-        h_delta = random.uniform(0.05, 0.35)
-        hsv = cube_helper.get_random_hsv()
+        # h_delta = random.uniform(0.05, 0.35)
+        # hsv = cube_helper.get_random_hsv()
+        rgb = cube_helper.get_random_rgb()
         for i in range(n):
-            hsv = cube_helper.h_delta(hsv, h_delta)
-            rgb = cube_helper.hsv_to_rgb(hsv)
+            # hsv = cube_helper.h_delta(hsv, h_delta)
+            # rgb = cube_helper.hsv_to_rgb(hsv)
             wave = Wave(self.cube, i, rgb)
             waves.append(wave)
         return waves
