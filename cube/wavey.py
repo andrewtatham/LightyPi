@@ -21,10 +21,12 @@ class Wave(object):
     def update(self):
         self.t += 1
         for j in range(self.cube.n):
-            degrees = self.t * 15.0 + self.i * 90.0 + j * 45.0
+            degrees = (self.t * 15.0 + self.i * 90.0 + j * 45.0) % 360
             radians = degrees * math.pi / 180.0
-            factor = -0.5 + 0.5 * math.sin(radians)
-            k = int(self.cube.n * factor)
+            factor = 0.5 + 0.5 * math.sin(radians)
+            k = int((self.cube.n - 1) * factor)
+            print("t:{} i:{} j:{} degrees:{} radians:{} factor:{} k:{}"
+                  .format(self.t, self.i, j, degrees, radians, factor, k))
             self.segments[j] = k
 
     def draw(self):
