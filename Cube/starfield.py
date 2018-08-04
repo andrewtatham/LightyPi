@@ -25,11 +25,7 @@ class Star(object):
 class StarFactory(object):
     def __init__(self, cube):
         self.cube = cube
-        self.rgb = random.choice([
-            (255, 0, 0),
-            (0, 255, 0),
-            (0, 0, 255)
-        ])
+        self.rgb = cube_helper.get_random_rgb()
         direction = random.choice("xyz") + random.choice("+-")
         self.direction_func = cube_helper.direction_funcs[direction]
         self.start_position_func = cube_helper.edge_start_position_funcs[direction]

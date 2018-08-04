@@ -1,13 +1,12 @@
-import colorsys
 import logging
 import platform
-import random
 import time
 
 import cube_helper
 from bouncy_ball import BouncyBalls
-from snake_3d import SnakeGame
+# from snake_3d import SnakeGame
 from starfield import StarField
+from wavey import WaveGame
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -151,6 +150,14 @@ def bouncy_ball():
     off()
 
 
+def wavey():
+    game = WaveGame(cube)
+    for _ in range(100):
+        game.run()
+        sleep(0.05)
+    off()
+
+
 try:
     run = True
     t = 0
@@ -169,11 +176,13 @@ try:
         # rainbow_cube()
         # sleep_off_sleep(on_secs, off_secs)
 
-        bouncy_ball()
+        # bouncy_ball()
 
-        snake()
+        # snake()
 
-        starfield()
+        # starfield()
+
+        wavey()
 
         if is_viz:
             t += 1

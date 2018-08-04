@@ -4,11 +4,21 @@ import random
 rgb_black = (0, 0, 0)
 
 
-def get_random_colour():
-    r = random.randint(0, 255)
-    g = random.randint(0, 255)
-    b = random.randint(0, 255)
-    return r, g, b
+def get_random_hsv():
+    h = random.uniform(0.0, 1.0)
+    s = 1.0
+    v = 255
+    return h, s, v
+
+
+def get_random_rgb():
+    return hsv_to_rgb(get_random_hsv())
+
+
+def h_delta(hsv, h_delta):
+    h, s, v = hsv
+    h = (h + h_delta) % 1.0
+    return h, s, v
 
 
 bys = {

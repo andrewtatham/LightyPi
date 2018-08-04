@@ -31,12 +31,7 @@ class BallFactory(object):
         self.cube = cube
 
     def create(self):
-        rgb = random.choice([
-            (255, 0, 0),
-            (0, 255, 0),
-            (0, 0, 255)
-        ])
-
+        rgb = cube_helper.get_random_rgb()
         xyz = cube_helper.start_position(self.cube.n)
         velocity_xyz = cube_helper.velocity_xyz()
         ball = Ball(xyz, rgb, velocity_xyz, self.cube)
