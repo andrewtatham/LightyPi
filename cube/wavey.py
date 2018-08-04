@@ -5,17 +5,18 @@ import cube_helper
 
 
 class Wave(object):
-    def __init__(self, cube, i, rgb):
+    def __init__(self, cube, i, rgb, map_func):
         self.cube = cube
         self.segments = [0 for _ in range(self.cube.n)]
         self.t = 0
         self.i = i
         self.rgb = rgb
+        self.map_func = map_func
 
     def clear(self):
         for j in range(self.cube.n):
             k = self.segments[j]
-            xyz = (self.i, j, k)
+            xyz = self.map_func((self.i, j, k))
             self.cube.set_rgb(xyz, cube_helper.rgb_black)
 
     def update(self):
@@ -32,23 +33,25 @@ class Wave(object):
     def draw(self):
         for j in range(self.cube.n):
             k = self.segments[j]
-            xyz = (self.i, j, k)
+            xyz = self.map_func((self.i, j, k))
             self.cube.set_rgb(xyz, self.rgb)
 
 
 class WaveFactory(object):
     def __init__(self, cube):
         self.cube = cube
+        self.map_func = random.choice(list(cube_helper.bys.values()))
+        self.rgb = cube_helper.get_random_rgb()
 
     def create(self, n):
         waves = []
         # h_delta = random.uniform(0.05, 0.35)
         # hsv = cube_helper.get_random_hsv()
-        rgb = cube_helper.get_random_rgb()
+
         for i in range(n):
             # hsv = cube_helper.h_delta(hsv, h_delta)
             # rgb = cube_helper.hsv_to_rgb(hsv)
-            wave = Wave(self.cube, i, rgb)
+            wave = Wave(self.cube, i, self.rgb, self.map_func)
             waves.append(wave)
         return waves
 
