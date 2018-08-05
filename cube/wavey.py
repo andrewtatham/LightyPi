@@ -5,36 +5,41 @@ import cube_helper
 
 
 class Wave(object):
-    def __init__(self, cube, i, rgb, map_func):
+    def __init__(self, cube, rgb, map_func):
         self.cube = cube
-        self.segments = [0 for _ in range(self.cube.n)]
+        self.segments = [[0 for _ in range(self.cube.n)] for _ in range(self.cube.n)]
         self.t = 0
-        self.i = i
         self.rgb = rgb
         self.map_func = map_func
+        self.t_phase = random.randint(1, 45)
+        self.i_phase = random.randint(0, 180) / self.cube.n
+        self.j_phase = random.randint(0, 180) / self.cube.n
 
     def clear(self):
-        for j in range(self.cube.n):
-            k = self.segments[j]
-            xyz = self.map_func((self.i, j, k))
-            self.cube.set_rgb(xyz, cube_helper.rgb_black)
+        for i in range(self.cube.n):
+            for j in range(self.cube.n):
+                k = self.segments[i][j]
+                xyz = self.map_func((i, j, k))
+                self.cube.set_rgb(xyz, cube_helper.rgb_black)
 
     def update(self):
         self.t += 1
-        for j in range(self.cube.n):
-            degrees = (self.t * 15.0 + self.i * 90.0 + j * 45.0) % 360
-            radians = degrees * math.pi / 180.0
-            factor = 0.5 + 0.5 * math.sin(radians)
-            k = int(round((self.cube.n - 1) * factor))
-            # print("t:{} i:{} j:{} degrees:{} radians:{} factor:{} k:{}"
-            #       .format(self.t, self.i, j, degrees, radians, factor, k))
-            self.segments[j] = k
+        for i in range(self.cube.n):
+            for j in range(self.cube.n):
+                degrees = (self.t * self.t_phase + i * self.i_phase + j * self.j_phase) % 360
+                radians = degrees * math.pi / 180.0
+                factor = 0.5 + 0.5 * math.sin(radians)
+                k = int(round((self.cube.n - 1) * factor))
+                # print("t:{} i:{} j:{} degrees:{} radians:{} factor:{} k:{}"
+                #       .format(self.t, self.i, j, degrees, radians, factor, k))
+                self.segments[i][j] = k
 
     def draw(self):
-        for j in range(self.cube.n):
-            k = self.segments[j]
-            xyz = self.map_func((self.i, j, k))
-            self.cube.set_rgb(xyz, self.rgb)
+        for i in range(self.cube.n):
+            for j in range(self.cube.n):
+                k = self.segments[i][j]
+                xyz = self.map_func((i, j, k))
+                self.cube.set_rgb(xyz, self.rgb)
 
 
 class WaveFactory(object):
@@ -43,17 +48,9 @@ class WaveFactory(object):
         self.map_func = random.choice(list(cube_helper.bys.values()))
         self.rgb = cube_helper.get_random_rgb()
 
-    def create(self, n):
-        waves = []
-        # h_delta = random.uniform(0.05, 0.35)
-        # hsv = cube_helper.get_random_hsv()
-
-        for i in range(n):
-            # hsv = cube_helper.h_delta(hsv, h_delta)
-            # rgb = cube_helper.hsv_to_rgb(hsv)
-            wave = Wave(self.cube, i, self.rgb, self.map_func)
-            waves.append(wave)
-        return waves
+    def create(self):
+        wave = Wave(self.cube, self.rgb, self.map_func)
+        return wave
 
 
 class WaveGame(object):
@@ -61,8 +58,8 @@ class WaveGame(object):
         self.cube = cube
         self.waves = []
         self.factory = WaveFactory(cube)
-        new = self.factory.create(5)
-        self.waves.extend(new)
+        new = self.factory.create()
+        self.waves.append(new)
 
     def run(self):
         for wave in self.waves:
