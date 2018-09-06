@@ -26,6 +26,12 @@ bys = {
     "y": lambda ijk: (ijk[2], ijk[0], ijk[1]),
     "z": lambda ijk: (ijk[1], ijk[2], ijk[0]),
 }
+
+
+def get_random_direction():
+    return random.choice("xyz") + random.choice("+-")
+
+
 direction_funcs = {
     "x+": lambda xyz: (xyz[0] + 1, xyz[1], xyz[2]),
     "x-": lambda xyz: (xyz[0] - 1, xyz[1], xyz[2]),
@@ -34,6 +40,7 @@ direction_funcs = {
     "z+": lambda xyz: (xyz[0], xyz[1], xyz[2] + 1),
     "z-": lambda xyz: (xyz[0], xyz[1], xyz[2] - 1),
 }
+
 edge_start_position_funcs = {
     "x+": lambda n: (0, random.randint(0, n - 1), random.randint(0, n - 1)),
     "x-": lambda n: (n - 1, random.randint(0, n - 1), random.randint(0, n - 1)),
@@ -41,6 +48,15 @@ edge_start_position_funcs = {
     "y-": lambda n: (random.randint(0, n - 1), n - 1, random.randint(0, n - 1)),
     "z+": lambda n: (random.randint(0, n - 1), random.randint(0, n - 1), 0),
     "z-": lambda n: (random.randint(0, n - 1), random.randint(0, n - 1), n - 1),
+}
+
+turn_choices = {
+    "x+": ["y+", "y-", "z+", "z-"],
+    "x-": ["y+", "y-", "z+", "z-"],
+    "y+": ["x+", "x-", "z+", "z-"],
+    "y-": ["x+", "x-", "z+", "z-"],
+    "z+": ["x+", "x-", "y+", "y-"],
+    "z-": ["x+", "x-", "y+", "y-"],
 }
 
 

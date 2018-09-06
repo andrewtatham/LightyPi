@@ -4,7 +4,7 @@ import time
 
 import cube_helper
 from bouncy_ball import BouncyBalls
-# from snake_3d import SnakeGame
+# import snake_3d
 from starfield import StarField
 from wavey import WaveGame
 
@@ -18,7 +18,7 @@ logger.info("node: %s", node)
 is_windows = _platform.startswith('Windows')
 is_mac_osx = _platform.startswith('Darwin')
 is_linux = _platform.startswith('Linux')
-is_rpi = node == "phatstack"
+is_rpi = node == "picube"
 is_viz = not is_rpi
 n = 5
 cube = None
@@ -126,12 +126,12 @@ def set_all_rgb(rgb, by=None):
 on_secs = 12
 off_secs = 1
 
-
-def snake():
-    game = SnakeGame(cube)
-    while game.run():
-        pass
-    off()
+#
+# def snake():
+#     game = snake_3d.SnakeGame(cube)
+#     while game.run():
+#         pass
+#     off()
 
 
 def starfield():
@@ -163,24 +163,24 @@ try:
     t = 0
 
     while run:
-        # if not is_viz:
-        # hello()
-        # sleep_off_sleep(on_secs, off_secs)
-        #
-        # rgb_cube()
-        # sleep_off_sleep(on_secs, off_secs)
-        #
-        # hsv_cube()
-        # sleep_off_sleep(on_secs, off_secs)
-        #
-        # rainbow_cube()
-        # sleep_off_sleep(on_secs, off_secs)
+        if not is_viz:
+            hello()
+            sleep_off_sleep(on_secs, off_secs)
 
-        # bouncy_ball()
+            rgb_cube()
+            sleep_off_sleep(on_secs, off_secs)
+
+            hsv_cube()
+            sleep_off_sleep(on_secs, off_secs)
+
+            rainbow_cube()
+            sleep_off_sleep(on_secs, off_secs)
+
+            bouncy_ball()
 
         # snake()
 
-        # starfield()
+        starfield()
 
         wavey()
 
