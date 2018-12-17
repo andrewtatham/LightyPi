@@ -9,45 +9,58 @@ def h_delta(h, delta):
     return h
 
 
-class BlinkstickFlexWrapper(BlinkstickHelper):
-    def __init__(self, led_count=32, serial="BS006639-3.1"):
-        BlinkstickHelper.__init__(self, led_count, serial)
-        self.larsson_scanner_index = 0
-        self.larsson_scanner_direction = True
-        self.larsson_scanner_v = 64
+class LarssonScanner(object):
+    def __init__(self, blinkstick_flex):
+        self.blinkstick_flex = blinkstick_flex
+        self.led_count = len(self.blinkstick_flex.buffer)
+        self._index = 0
+        self._direction = True
+        self._v = 64
 
-    def larsson_scanner(self):
+    def run(self):
         h = 0
-        while self.is_enabled:
+        while self.blinkstick_flex.is_enabled:
             h = h_delta(h, 0.001)
-            hsv = (h, 1.0, self.larsson_scanner_v)
-            self._larsson_scanner(hsv)
+            hsv = (h, 1.0, self._v)
+            self._run(hsv)
             time.sleep(0.1)
         still_on = True
         while still_on:
             time.sleep(1)
-            still_on = self.fade()
-            self.show()
+            still_on = self.blinkstick_flex.fade()
+            self.blinkstick_flex.show()
 
-    def _larsson_scanner(self, hsv):
-        if self.is_enabled:
-            self.fade()
-            if self.larsson_scanner_direction:
-                self.larsson_scanner_index += 1
+    def _run(self, hsv):
+        if self.blinkstick_flex.is_enabled:
+            self.blinkstick_flex.fade()
+            if self._direction:
+                self._index += 1
             else:
-                self.larsson_scanner_index -= 1
-            if self.larsson_scanner_index <= 0:
-                self.larsson_scanner_direction = True
-                self.larsson_scanner_index = 0
-            if self.larsson_scanner_index >= self.led_count - 1:
-                self.larsson_scanner_direction = False
-                self.larsson_scanner_index = self.led_count - 1
+                self._index -= 1
+            if self._index <= 0:
+                self._direction = True
+                self._index = 0
+            if self._index >= self.led_count - 1:
+                self._direction = False
+                self._index = self.led_count - 1
 
-            self.buffer[self.larsson_scanner_index] = hsv
-            self.show()
+            self.blinkstick_flex.buffer[self._index] = hsv
+            self.blinkstick_flex.show()
 
     def set_day_factor(self, day_factor):
-        self.larsson_scanner_v = int(8 + 64 * day_factor)
+        self._v = int(8 + 64 * day_factor)
+
+
+class BlinkstickFlexWrapper(BlinkstickHelper):
+    def __init__(self, led_count=32, serial="BS006639-3.1"):
+        BlinkstickHelper.__init__(self, led_count, serial)
+        self._larsson_scanner = LarssonScanner(self)
+
+    def larsson_scanner(self):
+        self._larsson_scanner.run()
+
+    def set_day_factor(self, day_factor):
+        self._larsson_scanner.set_day_factor(day_factor)
 
 
 if __name__ == '__main__':
