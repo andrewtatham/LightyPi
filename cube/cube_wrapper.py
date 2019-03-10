@@ -28,7 +28,7 @@ class Cube(CubeBase):
         r = rgb[0]
         g = rgb[1]
         b = rgb[2]
-        colour = neopixel.Color(g, r, b)
+        colour = Color(g, r, b)
         self.strip.setPixelColor(led, colour)
 
     def show(self):
