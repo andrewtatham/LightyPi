@@ -14,6 +14,7 @@ class Wave(object):
         self.t_phase = random.randint(1, 180)
         self.i_phase = random.randint(0, 90) / self.cube.n
         self.j_phase = random.randint(0, 90) / self.cube.n
+        print("t_phase:{} i_phase:{} j_phase:{}".format(self.t, self.i_phase, self.j_phase))
 
     def clear(self):
         for i in range(self.cube.n):
@@ -45,7 +46,10 @@ class Wave(object):
 class WaveFactory(object):
     def __init__(self, cube):
         self.cube = cube
-        self.map_func = random.choice(list(cube_helper.bys.values()))
+
+        by = 'z'
+        self.map_func = cube_helper.bys[by]
+
         self.rgb = cube_helper.get_random_rgb()
 
     def create(self):
