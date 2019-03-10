@@ -18,7 +18,7 @@ logger.info("node: %s", node)
 is_windows = _platform.startswith('Windows')
 is_mac_osx = _platform.startswith('Darwin')
 is_linux = _platform.startswith('Linux')
-is_rpi = node == "phatstack"
+is_rpi = node == "picube"
 is_viz = not is_rpi
 n = 5
 cube = None
