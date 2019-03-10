@@ -70,9 +70,9 @@ class Cube(CubeBase):
 
     def show_me_what_you_got(self):
 
-        self.root = tkinter.Tk()
+        self.root = Tk()
 
-        self.label = tkinter.Label(self.root)
+        self.label = Label(self.root)
         self.label.pack()
         self.label.place(x=0, y=0)
 
