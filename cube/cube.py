@@ -164,23 +164,24 @@ try:
 
     while run:
         # if not is_viz:
-        # hello()
-        # sleep_off_sleep(on_secs, off_secs)
-        #
-        # rgb_cube()
-        # sleep_off_sleep(on_secs, off_secs)
-        #
-        # hsv_cube()
-        # sleep_off_sleep(on_secs, off_secs)
-        #
-        # rainbow_cube()
-        # sleep_off_sleep(on_secs, off_secs)
 
-        # bouncy_ball()
+        hello()
+        sleep_off_sleep(on_secs, off_secs)
+
+        rgb_cube()
+        sleep_off_sleep(on_secs, off_secs)
+
+        hsv_cube()
+        sleep_off_sleep(on_secs, off_secs)
+
+        rainbow_cube()
+        sleep_off_sleep(on_secs, off_secs)
+
+        bouncy_ball()
 
         # snake()
 
-        # starfield()
+        starfield()
 
         wavey()
 
