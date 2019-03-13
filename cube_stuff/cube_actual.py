@@ -3,8 +3,8 @@ import time
 from rpi_ws281x import *
 
 # LED strip configuration:
-from cube_base import CubeBase
-from cube_map import CubeMap
+from cube_stuff.cube_base import CubeBase
+from cube_stuff.cube_map import CubeMap
 
 LED_PIN = 18  # GPIO pin connected to the pixels (18 uses PWM!).
 # LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).

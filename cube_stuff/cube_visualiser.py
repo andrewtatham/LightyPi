@@ -12,7 +12,7 @@ else:
 
 from PIL import Image, ImageDraw, ImageTk
 
-from cube_base import CubeBase
+from cube_stuff.cube_base import CubeBase
 
 
 def ensure_directory_exists_and_is_empty(folder):
