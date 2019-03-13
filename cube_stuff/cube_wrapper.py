@@ -21,9 +21,10 @@ class CubeWrapper(object):
         self._cube_instance = cube_instance
         self._run = True
         self._is_viz = is_viz
+        self._brightness = 64
 
     def _hello(self):
-        b = 255
+        b = self._brightness
         self._set_all_rgb((b, 0, 0), "x")
         self._sleep(2)
         self._set_all_rgb((0, b, 0), "y")
@@ -33,7 +34,7 @@ class CubeWrapper(object):
         self._off()
 
     def _rgb_cube(self):
-        bright = 255
+        bright = self._brightness
         for x in range(self.n):
             for y in range(self.n):
                 for z in range(self.n):
@@ -49,14 +50,14 @@ class CubeWrapper(object):
                 for z in range(self.n):
                     h = 1.0 * x / self.n
                     s = 1.0 * y / self.n
-                    v = 255 * z / self.n
+                    v = self._brightness * z / self.n
                     rgb = cube_helper.hsv_to_rgb((h, s, v))
                     self._cube_instance.set_rgb((x, y, z), rgb)
         self._cube_instance.show()
 
     def _rainbow_cube(self):
         s = 1.0
-        v = 255
+        v = self._brightness
         for x in range(self.n):
             h = 1.0 * x / self.n
             for y in range(self.n):
@@ -138,20 +139,20 @@ class CubeWrapper(object):
 
             while self._run:
                 # if not self._is_viz:
-                    # self._rgb_cube()
-                    # self._sleep_off_sleep(on_secs, off_secs)
-                    #
-                    # self._hsv_cube()
-                    # self._sleep_off_sleep(on_secs, off_secs)
-                    #
-                    # self._rainbow_cube()
-                    # self._sleep_off_sleep(on_secs, off_secs)
+                # self._rgb_cube()
+                # self._sleep_off_sleep(on_secs, off_secs)
+                #
+                # self._hsv_cube()
+                # self._sleep_off_sleep(on_secs, off_secs)
+                #
+                # self._rainbow_cube()
+                # self._sleep_off_sleep(on_secs, off_secs)
 
-                    # self._bouncy_ball()
+                # self._bouncy_ball()
 
-                    # self._snake()
+                # self._snake()
 
-                    # self._starfield()
+                # self._starfield()
 
                 self._wavey()
 
@@ -170,6 +171,9 @@ class CubeWrapper(object):
 
     def off(self):
         self._run = False
+
+    def set_day_factor(self, day_factor):
+        self._brightness = int(8 + 64 * day_factor)
 
 
 def get():

@@ -11,10 +11,10 @@ class Wave(object):
         self.t = 0
         self.rgb = rgb
         self.map_func = map_func
-        self.t_phase = random.randint(15, 180) / self.cube.n
-        self.i_phase = random.randint(15, 180) / self.cube.n
-        self.j_phase = random.randint(15, 180) / self.cube.n
-        print("t_phase:{} i_phase:{} j_phase:{}".format(self.t_phase, self.i_phase, self.j_phase))
+        self.t_phase = random.randint(-180, 180) / self.cube.n
+        self.i_phase = random.randint(-180, 180) / self.cube.n
+        self.j_phase = random.randint(-180, 180) / self.cube.n
+        # print("t_phase:{} i_phase:{} j_phase:{}".format(self.t_phase, self.i_phase, self.j_phase))
 
     def clear(self):
         for i in range(self.cube.n):

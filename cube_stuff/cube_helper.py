@@ -1,13 +1,15 @@
 import colorsys
 import random
 
+import brightness_helper
+
 rgb_black = (0, 0, 0)
 
 
 def get_random_hsv():
     h = random.uniform(0.0, 1.0)
     s = 1.0
-    v = 255
+    v = brightness_helper.v
     return h, s, v
 
 

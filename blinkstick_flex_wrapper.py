@@ -1,5 +1,6 @@
 import time
 
+import brightness_helper
 from blinkstick_helper import BlinkstickHelper
 
 
@@ -15,13 +16,12 @@ class LarssonScanner(object):
         self.led_count = len(self.blinkstick_flex.buffer)
         self._index = 0
         self._direction = True
-        self._v = 64
 
     def run(self):
         h = 0
         while self.blinkstick_flex.is_enabled:
             h = h_delta(h, 0.001)
-            hsv = (h, 1.0, self._v)
+            hsv = (h, 1.0, brightness_helper.v)
             self._run(hsv)
             time.sleep(0.1)
         still_on = True
@@ -47,9 +47,6 @@ class LarssonScanner(object):
             self.blinkstick_flex.buffer[self._index] = hsv
             self.blinkstick_flex.show()
 
-    def set_day_factor(self, day_factor):
-        self._v = int(8 + 64 * day_factor)
-
 
 class BlinkstickFlexWrapper(BlinkstickHelper):
     def __init__(self, led_count=32, serial="BS006639-3.1"):
@@ -58,9 +55,6 @@ class BlinkstickFlexWrapper(BlinkstickHelper):
 
     def larsson_scanner(self):
         self._larsson_scanner.run()
-
-    def set_day_factor(self, day_factor):
-        self._larsson_scanner.set_day_factor(day_factor)
 
 
 if __name__ == '__main__':

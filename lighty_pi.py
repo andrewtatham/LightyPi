@@ -10,6 +10,7 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 from blinkstick import blinkstick
 
+import brightness_helper
 from cube_stuff import cube_wrapper
 
 try:
@@ -257,40 +258,39 @@ class LightyPi(object):
 
     def _at_dawn(self):
         day_factor = 0.0
-        self.set_day_factor(day_factor)
+        self._set_day_factor(day_factor)
         logging.info('dawn')
 
     def _at_sunrise(self):
         day_factor = 1.0
-        self.set_day_factor(day_factor)
+        self._set_day_factor(day_factor)
         logging.info('dawn')
 
     def _at_sunset(self):
         day_factor = 1.0
-        self.set_day_factor(day_factor)
+        self._set_day_factor(day_factor)
         logging.info('sunset')
 
     def _at_dusk(self):
         day_factor = 0.0
-        self.set_day_factor(day_factor)
+        self._set_day_factor(day_factor)
         logging.info('dusk')
 
     def _during_sunrise(self):
         x = self.sunrise - datetime.datetime.now(tz)
         y = self.sunrise - self.dawn
         day_factor = x.total_seconds() / y.total_seconds()
-        self.set_day_factor(day_factor)
+        self._set_day_factor(day_factor)
 
     def _during_sunset(self):
         x = self.dusk - datetime.datetime.now(tz)
         y = self.dusk - self.sunset
         day_factor = 1.0 - (x.total_seconds() / y.total_seconds())
-        self.set_day_factor(day_factor)
+        self._set_day_factor(day_factor)
 
-    def set_day_factor(self, day_factor):
+    def _set_day_factor(self, day_factor):
         logging.info('day factor: {}'.format(day_factor))
-        self.day_factor = day_factor
-        self.blinkstick_flex.set_day_factor(day_factor)
+        brightness_helper.set_day_factor(day_factor)
 
     def larsson_scanner(self):
         self.scheduler.add_job(self._before_morning, before_morning)
