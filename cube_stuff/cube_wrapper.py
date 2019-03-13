@@ -201,4 +201,4 @@ def get():
 
 if __name__ == '__main__':
     cube_wrapper = get()
-    cube_wrapper.run(1)
+    cube_wrapper.run(2)
