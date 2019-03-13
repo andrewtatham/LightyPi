@@ -1,7 +1,7 @@
 import math
 import random
 
-import cube_helper
+from cube_stuff import cube_helper
 
 
 class Wave(object):
