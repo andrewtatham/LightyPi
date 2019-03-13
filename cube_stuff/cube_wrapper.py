@@ -183,11 +183,11 @@ def get():
 
     if is_windows or is_mac_osx:
         logger.info("Viz")
-        import cube_visualiser
+        from cube_stuff import cube_visualiser
         cube_instance = cube_visualiser.CubeVisualizer(n)
     elif is_picube:
         logger.info("Cube")
-        import cube_actual
+        from cube_stuff import cube_actual
         cube_instance = cube_actual.ActualCube(n)
 
     if cube_instance:
