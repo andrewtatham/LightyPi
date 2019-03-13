@@ -47,7 +47,7 @@ class WaveFactory(object):
     def __init__(self, cube):
         self.cube = cube
 
-        by = random.choice(cube_helper.bys.keys())
+        by = random.choice(list(cube_helper.bys.keys()))
         self.map_func = cube_helper.bys[by]
 
         self.rgb = cube_helper.get_random_rgb()
