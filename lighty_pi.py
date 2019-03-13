@@ -10,6 +10,8 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 from blinkstick import blinkstick
 
+from cube import cube_wrapper
+
 try:
     import sportball
 except IOError as ex:
@@ -48,7 +50,7 @@ def _get_cron_trigger_for_datetime(dt):
     return CronTrigger(year=dt.year, month=dt.month, day=dt.day, hour=dt.hour, minute=dt.minute, second=dt.second)
 
 
-class LightyPi():
+class LightyPi(object):
     def __init__(self):
         self.blinksticks = None
         self.blinkstick_nano = None
@@ -57,6 +59,7 @@ class LightyPi():
         self.aws = None
         self.cheer = None
         self.hue = None
+        self._cube = None
         self.scheduler = BlockingScheduler()
         self.is_linux = platform.platform().startswith('Linux')
         self._initialize()
@@ -65,11 +68,13 @@ class LightyPi():
     def _initialize(self):
         self._init_logging()
         self._init_blinksticks()
+
         if self.is_linux:
             self._init_piglow()
             # self._init_aws()
             # self._init_cheerlights()
             # self._init_hue()
+            self._init_cube()
 
     def _init_aws(self):
         self.aws = AwsClient()
@@ -104,6 +109,13 @@ class LightyPi():
         try:
             self.piglow = piglow_wrapper.get()
             logging.info("piglow")
+        except Exception as ex:
+            logging.warning(ex)
+
+    def _init_cube(self):
+        try:
+            self._cube = cube_wrapper.get()
+            logging.info("cube")
         except Exception as ex:
             logging.warning(ex)
 
@@ -153,6 +165,8 @@ class LightyPi():
             self.piglow.on()
         if self.hue:
             self.hue.on()
+        if self._cube:
+            self._cube.on()
 
     def lights_off(self):
         for blinkstick in self.blinksticks:
@@ -161,6 +175,8 @@ class LightyPi():
             self.piglow.off()
         if self.hue:
             self.hue.off()
+        if self._cube:
+            self._cube.off()
 
     def run(self):
         self.scheduler.print_jobs()
@@ -299,6 +315,16 @@ class LightyPi():
 
     def _sportball(self):
         sportball.update()
+
+    def cube_job(self):
+        self.scheduler.add_job(self._before_morning, before_morning)
+        self.scheduler.add_job(self._at_bedtime, at_bedtime)
+        self.scheduler.add_job(self._cube_job, at_morning)
+        self.scheduler.add_job(self._cube_job)  # omit trigger = run at startup
+
+    def _cube_job(self):
+        if self._cube:
+            self._cube.run()
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 import random
 
-from cube import cube_helper
+from cube_wrapper import cube_helper
 
 
 class Snake(object):

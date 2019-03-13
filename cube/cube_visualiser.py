@@ -22,10 +22,10 @@ def ensure_directory_exists_and_is_empty(folder):
         os.makedirs(folder)
 
 
-class Cube(CubeBase):
+class CubeVisualizer(CubeBase):
     def __init__(self, n):
         self.n = n
-        self._buffer = [[[(0, 0, 0) for x in range(n)] for y in range(n)] for z in range(n)]
+        self._buffer = [[[(0, 0, 0) for _ in range(n)] for _ in range(n)] for _ in range(n)]
         self.z_offset = (8, 8)
         self.pixel = 8
         self.margin = 100
@@ -68,14 +68,17 @@ class Cube(CubeBase):
         self.paths.append(path)
         self.image_number += 1
 
-    def show_me_what_you_got(self):
+    def sleep(self, secs):
+        pass
 
+    def finished(self):
+        self._show_me_what_you_got()
+
+    def _show_me_what_you_got(self):
         self.root = Tk()
-
         self.label = Label(self.root)
         self.label.pack()
         self.label.place(x=0, y=0)
-
         self.root.after(100, self.callback)
         self.root.mainloop()
 
@@ -86,13 +89,12 @@ class Cube(CubeBase):
                 for path in self.paths:
                     print(path)
                     self.change_image(path)
-                    time.sleep(0.1)
-            except Exception:
+                    time.sleep(0.05)
+            except KeyboardInterrupt:
                 run = False
         ensure_directory_exists_and_is_empty(self.folder)
 
     def change_image(self, path):
-
         image = Image.open(path)
         photo = ImageTk.PhotoImage(image)
         self.label.config(image=photo)

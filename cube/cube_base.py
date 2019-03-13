@@ -5,3 +5,9 @@ class CubeBase(object):
 
     def show(self):
         pass
+
+    def sleep(self, secs):
+        pass
+
+    def finished(self):
+        pass
