@@ -52,7 +52,7 @@ class BouncyBalls(object):
             ball.clear()
         for ball in self.balls:
             ball.update()
-        if random.randint(0, 5) == 0:
+        if random.randint(0, 100) == 0:
             new = self.factory.create()
             self.balls.append(new)
         for ball in self.balls:
