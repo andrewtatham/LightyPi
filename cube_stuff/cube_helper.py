@@ -1,27 +1,4 @@
-import colorsys
 import random
-
-import brightness_helper
-
-rgb_black = (0, 0, 0)
-
-
-def get_random_hsv():
-    h = random.uniform(0.0, 1.0)
-    s = 1.0
-    v = brightness_helper.v
-    return h, s, v
-
-
-def get_random_rgb():
-    return hsv_to_rgb(get_random_hsv())
-
-
-def h_delta(hsv, h_delta):
-    h, s, v = hsv
-    h = (h + h_delta) % 1.0
-    return h, s, v
-
 
 bys = {
     "x": lambda ijk: (ijk[2], ijk[0], ijk[1]),
@@ -73,17 +50,6 @@ def is_out_of_bounds(xyz, n):
     return x < 0 or x >= n or \
            y < 0 or y >= n or \
            z < 0 or z >= n
-
-
-def hsv_to_rgb(hsv):
-    h = hsv[0]
-    s = hsv[1]
-    v = hsv[2]
-    rgb = colorsys.hsv_to_rgb(h, s, v)
-    r = int(rgb[0])
-    g = int(rgb[1])
-    b = int(rgb[2])
-    return r, g, b
 
 
 def bounce(xyz, velocity_xyz, n):

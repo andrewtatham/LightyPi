@@ -1,6 +1,7 @@
 import operator
 import random
 
+import colour_helper
 from cube_stuff import cube_helper
 
 
@@ -12,7 +13,7 @@ class Ball(object):
         self.cube = cube
 
     def clear(self):
-        self.cube.set_rgb(self.xyz, cube_helper.rgb_black)
+        self.cube.set_rgb(self.xyz, colour_helper.rgb_black)
 
     def update(self):
         if cube_helper.is_at_edge(self.xyz, self.cube.n):
@@ -31,7 +32,7 @@ class BallFactory(object):
         self.cube = cube
 
     def create(self):
-        rgb = cube_helper.get_random_rgb()
+        rgb = colour_helper.get_random_rgb()
         xyz = cube_helper.start_position(self.cube.n)
         velocity_xyz = cube_helper.velocity_xyz()
         ball = Ball(xyz, rgb, velocity_xyz, self.cube)

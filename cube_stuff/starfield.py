@@ -1,5 +1,6 @@
 import random
 
+import colour_helper
 from cube_stuff import cube_helper
 
 
@@ -12,7 +13,7 @@ class Star(object):
         self.alive = True
 
     def clear(self):
-        self.cube.set_rgb(self.xyz, cube_helper.rgb_black)
+        self.cube.set_rgb(self.xyz, colour_helper.rgb_black)
 
     def update(self):
         self.xyz = self.direction_func(self.xyz)
@@ -25,7 +26,7 @@ class Star(object):
 class StarFactory(object):
     def __init__(self, cube):
         self.cube = cube
-        self.rgb = cube_helper.get_random_rgb()
+        self.rgb = colour_helper.get_random_rgb()
         direction = random.choice("xyz") + random.choice("+-")
         self.direction_func = cube_helper.direction_funcs[direction]
         self.start_position_func = cube_helper.edge_start_position_funcs[direction]

@@ -10,7 +10,7 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 from blinkstick import blinkstick
 
-import brightness_helper
+import colour_helper
 from cube_stuff import cube_wrapper
 
 try:
@@ -290,7 +290,7 @@ class LightyPi(object):
 
     def _set_day_factor(self, day_factor):
         logging.info('day factor: {}'.format(day_factor))
-        brightness_helper.set_day_factor(day_factor)
+        colour_helper.set_day_factor(day_factor)
 
     def larsson_scanner(self):
         self.scheduler.add_job(self._before_morning, before_morning)

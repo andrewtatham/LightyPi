@@ -1,6 +1,7 @@
 import logging
 import platform
 
+import colour_helper
 from cube_stuff import cube_helper
 from cube_stuff.bouncy_ball import BouncyBalls
 from cube_stuff.starfield import StarField
@@ -51,7 +52,7 @@ class CubeWrapper(object):
                     h = 1.0 * x / self.n
                     s = 1.0 * y / self.n
                     v = self._brightness * z / self.n
-                    rgb = cube_helper.hsv_to_rgb((h, s, v))
+                    rgb = colour_helper.hsv_to_rgb((h, s, v))
                     self._cube_instance.set_rgb((x, y, z), rgb)
         self._cube_instance.show()
 
@@ -62,7 +63,7 @@ class CubeWrapper(object):
             h = 1.0 * x / self.n
             for y in range(self.n):
                 for z in range(self.n):
-                    rgb = cube_helper.hsv_to_rgb((h, s, v))
+                    rgb = colour_helper.hsv_to_rgb((h, s, v))
                     self._cube_instance.set_rgb((x, y, z), rgb)
         self._cube_instance.show()
 
@@ -163,6 +164,8 @@ class CubeWrapper(object):
 
         except KeyboardInterrupt:
             pass
+        except Exception as ex:
+            print(ex)
         finally:
             self._cube_instance.finished()
 

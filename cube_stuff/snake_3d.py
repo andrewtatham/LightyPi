@@ -1,5 +1,6 @@
 import random
 
+import colour_helper
 from cube_wrapper import cube_helper
 
 
@@ -24,7 +25,7 @@ class SnakeFactory(object):
 
     def create(self):
         length = 2
-        rgb = cube_helper.get_random_rgb()
+        rgb = colour_helper.get_random_rgb()
         rgb_alt = rgb
         xyz = cube_helper.start_position(self.cube.n)
         direction = None

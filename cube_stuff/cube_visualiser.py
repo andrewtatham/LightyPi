@@ -63,8 +63,8 @@ class CubeVisualizer(CubeBase):
                     rect = self.rectangle((x, y), (self.pixel, self.pixel))
                     self.draw.ellipse(rect, rgb, rgb)
         path = self.folder + "image{}.BMP".format(self.image_number)
+        print("saving {}".format(path))
         self.img.save(path, "BMP")
-
         self.paths.append(path)
         self.image_number += 1
 
