@@ -90,8 +90,9 @@ class CubeVisualizer(CubeBase):
                     print(path)
                     self.change_image(path)
                     time.sleep(0.05)
-            except KeyboardInterrupt:
+            except Exception:
                 run = False
+
         ensure_directory_exists_and_is_empty(self.folder)
 
     def change_image(self, path):

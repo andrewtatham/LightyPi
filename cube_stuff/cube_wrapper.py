@@ -16,10 +16,11 @@ off_secs = 1
 
 
 class CubeWrapper(object):
-    def __init__(self, n, cube_instance):
+    def __init__(self, n, cube_instance, is_viz):
         self.n = n
         self._cube_instance = cube_instance
         self._run = True
+        self._is_viz = is_viz
 
     def _hello(self):
         b = 255
@@ -131,24 +132,26 @@ class CubeWrapper(object):
             self._run = True
             t = 0
 
-            while self._run:
+            if not self._is_viz:
                 self._hello()
                 self._sleep_off_sleep(on_secs, off_secs)
 
-                self._rgb_cube()
-                self._sleep_off_sleep(on_secs, off_secs)
+            while self._run:
+                if not self._is_viz:
+                    # self._rgb_cube()
+                    # self._sleep_off_sleep(on_secs, off_secs)
+                    #
+                    # self._hsv_cube()
+                    # self._sleep_off_sleep(on_secs, off_secs)
+                    #
+                    # self._rainbow_cube()
+                    # self._sleep_off_sleep(on_secs, off_secs)
 
-                self._hsv_cube()
-                self._sleep_off_sleep(on_secs, off_secs)
+                    self._bouncy_ball()
 
-                self._rainbow_cube()
-                self._sleep_off_sleep(on_secs, off_secs)
+                    # self._snake()
 
-                self._bouncy_ball()
-
-                # self._snake()
-
-                self._starfield()
+                    self._starfield()
 
                 self._wavey()
 
@@ -179,19 +182,19 @@ def get():
     is_mac_osx = _platform.startswith('Darwin')
     # is_linux = _platform.startswith('Linux')
     is_picube = node == "picube"
-    cube_instance = None
 
     if is_windows or is_mac_osx:
         logger.info("Viz")
+        is_viz = True
         from cube_stuff import cube_visualiser
         cube_instance = cube_visualiser.CubeVisualizer(n)
+        return CubeWrapper(n, cube_instance, is_viz)
     elif is_picube:
         logger.info("Cube")
+        is_viz = False
         from cube_stuff import cube_actual
         cube_instance = cube_actual.ActualCube(n)
-
-    if cube_instance:
-        return CubeWrapper(n, cube_instance)
+        return CubeWrapper(n, cube_instance, is_viz)
     else:
         return None
 
