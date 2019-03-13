@@ -137,7 +137,7 @@ class CubeWrapper(object):
                 self._sleep_off_sleep(on_secs, off_secs)
 
             while self._run:
-                if not self._is_viz:
+                # if not self._is_viz:
                     # self._rgb_cube()
                     # self._sleep_off_sleep(on_secs, off_secs)
                     #
@@ -147,11 +147,11 @@ class CubeWrapper(object):
                     # self._rainbow_cube()
                     # self._sleep_off_sleep(on_secs, off_secs)
 
-                    self._bouncy_ball()
+                    # self._bouncy_ball()
 
                     # self._snake()
 
-                    self._starfield()
+                    # self._starfield()
 
                 self._wavey()
 
