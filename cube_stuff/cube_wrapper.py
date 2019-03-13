@@ -1,11 +1,12 @@
 import logging
 import platform
 
-from bouncy_ball import BouncyBalls
-# from snake_3d import SnakeGame
 from cube_stuff import cube_helper
-from starfield import StarField
-from wavey import WaveGame
+from cube_stuff.bouncy_ball import BouncyBalls
+from cube_stuff.starfield import StarField
+from cube_stuff.wavey import WaveGame
+
+# from cube_stuff.snake_3d import SnakeGame
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
