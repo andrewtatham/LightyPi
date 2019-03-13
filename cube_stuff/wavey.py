@@ -11,7 +11,7 @@ class Wave(object):
         self.segments = [[0 for _ in range(self.cube.n)] for _ in range(self.cube.n)]
         self.t = 0
         self._hsv = colour_helper.get_random_hsv()
-        self._h_delta = random.uniform(-0.05, 0.05)
+        self._h_delta = random.uniform(-0.01, 0.01)
         self.map_func = random.choice(list(cube_helper.bys.values()))
         self.t_phase = random.randint(-180, 180) / self.cube.n
         self.i_phase = random.randint(-180, 180) / self.cube.n
