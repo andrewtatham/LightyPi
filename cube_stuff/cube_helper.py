@@ -22,9 +22,9 @@ def h_delta(hsv, h_delta):
 
 
 bys = {
-    "x": lambda ijk: (ijk[0], ijk[1], ijk[2]),
+    "x": lambda ijk: (ijk[2], ijk[0], ijk[1]),
     "y": lambda ijk: (ijk[1], ijk[2], ijk[0]),
-    "z": lambda ijk: (ijk[2], ijk[0], ijk[1]),
+    "z": lambda ijk: (ijk[0], ijk[1], ijk[2]),
 }
 direction_funcs = {
     "x+": lambda xyz: (xyz[0] + 1, xyz[1], xyz[2]),
