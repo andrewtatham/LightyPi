@@ -10,7 +10,7 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 from blinkstick import blinkstick
 
-from cube import cube_wrapper
+from cube_stuff import cube_wrapper
 
 try:
     import sportball

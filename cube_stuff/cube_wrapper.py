@@ -1,10 +1,9 @@
 import logging
 import platform
-import time
 
-import cube_helper
 from bouncy_ball import BouncyBalls
 # from snake_3d import SnakeGame
+from cube_stuff import cube_helper
 from starfield import StarField
 from wavey import WaveGame
 
