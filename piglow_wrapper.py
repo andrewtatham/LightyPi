@@ -147,8 +147,8 @@ def get():
     try:
         import sys
         sys.path.append("piglow")
-        import piglow
-        return PiGlowWrapper(piglow.PiGlow())
+        from piglow import PiGlow
+        return PiGlowWrapper(PiGlow())
     except Exception as ex:
         logging.warning(ex)
 
