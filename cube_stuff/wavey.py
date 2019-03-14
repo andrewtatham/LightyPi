@@ -63,9 +63,8 @@ class WaveGame(object):
         self.cube = cube
         self.waves = []
         self.factory = WaveFactory(cube)
-        for _ in range(random.randint(1, 3)):
-            new = self.factory.create()
-            self.waves.append(new)
+        new = self.factory.create()
+        self.waves.append(new)
 
     def run(self):
         for wave in self.waves:
