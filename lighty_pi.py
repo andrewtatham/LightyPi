@@ -2,6 +2,7 @@ import colorsys
 import datetime
 import logging
 import platform
+import pprint
 
 import colour
 import pytz
@@ -233,7 +234,7 @@ class LightyPi(object):
         today = datetime.date.today()
         self._today_sun_data = leeds.sun(date=today, local=True)
         self.timezone = leeds.timezone
-        logging.info(self._today_sun_data)
+        logging.info(pprint.pformat(self._today_sun_data))
 
         self.dawn = self._today_sun_data['dawn']
         self.sunrise = self._today_sun_data['sunrise']
@@ -264,7 +265,7 @@ class LightyPi(object):
     def _at_sunrise(self):
         day_factor = 1.0
         self._set_day_factor(day_factor)
-        logging.info('dawn')
+        logging.info('sunrise')
 
     def _at_sunset(self):
         day_factor = 1.0
@@ -277,15 +278,11 @@ class LightyPi(object):
         logging.info('dusk')
 
     def _during_sunrise(self):
-        x = self.sunrise - datetime.datetime.now(tz)
-        y = self.sunrise - self.dawn
-        day_factor = x.total_seconds() / y.total_seconds()
+        day_factor = colour_helper.get_day_factor(self.dawn, datetime.datetime.now(tz), self.sunrise, True)
         self._set_day_factor(day_factor)
 
     def _during_sunset(self):
-        x = self.dusk - datetime.datetime.now(tz)
-        y = self.dusk - self.sunset
-        day_factor = 1.0 - (x.total_seconds() / y.total_seconds())
+        day_factor = colour_helper.get_day_factor(self.sunset, datetime.datetime.now(tz), self.dusk, False)
         self._set_day_factor(day_factor)
 
     def _set_day_factor(self, day_factor):

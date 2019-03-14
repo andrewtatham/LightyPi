@@ -32,6 +32,16 @@ def hsv_to_rgb(hsv):
     return r, g, b
 
 
+def get_day_factor(from_dt, now_dt, to_dt, increasing):
+    x = from_dt - now_dt
+    y = to_dt - from_dt
+    day_factor = x.total_seconds() / y.total_seconds()
+    if increasing:
+        return day_factor
+    else:
+        return 1.0 - day_factor
+
+
 def set_day_factor(_day_factor):
     global day_factor, brightness
     day_factor = _day_factor
