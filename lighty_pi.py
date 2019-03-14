@@ -97,7 +97,7 @@ class LightyPi(object):
         self.blinksticks = []
         for bstick in blinksticks:
             description = bstick.get_description()
-            logging.info(bstick.get_serial(), description)
+            logging.info("{} {}".format(bstick.get_serial(), description))
             if description == "BlinkStick Nano":
                 self.blinkstick_nano = BlinkstickNanoWrapper()
                 self.blinksticks.append(self.blinkstick_nano)
@@ -110,14 +110,16 @@ class LightyPi(object):
     def _init_piglow(self):
         try:
             self.piglow = piglow_wrapper.get()
-            logging.info("piglow")
+            if self.piglow:
+                logging.info("piglow")
         except Exception as ex:
             logging.warning(ex)
 
     def _init_cube(self):
         try:
             self._cube = cube_wrapper.get()
-            logging.info("cube")
+            if self._cube:
+                logging.info("cube")
         except Exception as ex:
             logging.warning(ex)
 
