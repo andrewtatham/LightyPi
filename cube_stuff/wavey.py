@@ -39,9 +39,11 @@ class Wave(object):
                 self.segments[i][j] = k
 
     def draw(self):
-        rgb = colour_helper.hsv_to_rgb(self._hsv)
+        hsv = self._hsv
         for i in range(self.cube.n):
             for j in range(self.cube.n):
+                hsv = colour_helper.h_delta(hsv, self._h_delta)
+                rgb = colour_helper.hsv_to_rgb(hsv)
                 k = self.segments[i][j]
                 xyz = self.map_func((i, j, k))
                 self.cube.set_rgb(xyz, rgb)
