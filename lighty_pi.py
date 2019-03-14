@@ -297,8 +297,6 @@ class LightyPi(object):
 
     def _larsson_scanner(self):
         if self.blinkstick_flex:
-            self.blinkstick_flex.set_day_factor(self.day_factor)
-            self.lights_on()
             self.blinkstick_flex.larsson_scanner()
 
     def _before_morning(self):

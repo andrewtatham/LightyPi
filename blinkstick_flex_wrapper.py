@@ -21,7 +21,7 @@ class LarssonScanner(object):
         h = 0
         while self.blinkstick_flex.is_enabled:
             h = h_delta(h, 0.001)
-            hsv = (h, 1.0, colour_helper.v)
+            hsv = (h, 1.0, colour_helper.brightness)
             self._run(hsv)
             time.sleep(0.1)
         still_on = True

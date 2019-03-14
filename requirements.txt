@@ -11,5 +11,3 @@ phue
 paho-mqtt
 Astral
 rpi_ws281x
-adafruit-blinka
-adafruit-circuitpython-neopixel
