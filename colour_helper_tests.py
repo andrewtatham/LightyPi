@@ -7,7 +7,7 @@ import colour_helper
 class ColourHelperTestCase(unittest.TestCase):
 
     def test_get_day_factor_increasing(self):
-        from_dt = datetime.datetime(2019, 3, 15, 06, 00)
+        from_dt = datetime.datetime(2019, 3, 15, 6, 00)
         to_dt = datetime.datetime(2019, 3, 15, 9, 00)
         range_minutes = (to_dt - from_dt).seconds / 60
         step_minutes = 45
