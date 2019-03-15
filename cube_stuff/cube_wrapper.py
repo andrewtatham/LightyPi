@@ -153,7 +153,7 @@ class CubeWrapper(object):
 
                 # self._snake()
 
-                # self._starfield()
+                self._starfield()
 
                 self._wavey()
 
