@@ -17,7 +17,7 @@ class ColourHelperTestCase(unittest.TestCase):
     def test_get_day_factor_increasing(self):
         from_dt = datetime.datetime(2019, 3, 15, 6, 00)
         to_dt = datetime.datetime(2019, 3, 15, 9, 00)
-        range_minutes = (to_dt - from_dt).seconds / 60
+        range_minutes = int((to_dt - from_dt).seconds / 60)
         step_minutes = 45
 
         date_generated = (from_dt + datetime.timedelta(minutes=mins)
@@ -33,7 +33,7 @@ class ColourHelperTestCase(unittest.TestCase):
     def test_get_day_factor_decreasing(self):
         from_dt = datetime.datetime(2019, 3, 15, 18, 00)
         to_dt = datetime.datetime(2019, 3, 15, 21, 00)
-        range_minutes = (to_dt - from_dt).seconds / 60
+        range_minutes = int((to_dt - from_dt).seconds / 60)
         step_minutes = 45
 
         date_generated = (from_dt + datetime.timedelta(minutes=mins)

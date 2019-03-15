@@ -3,6 +3,8 @@ import datetime
 import random
 
 rgb_black = (0, 0, 0)
+day_factor = None
+brightness = None
 
 
 def get_random_hsv():
@@ -54,13 +56,10 @@ def set_day_factor(_day_factor):
     brightness = int(8 + 64 * day_factor)
 
 
-day_factor = None
-brightness = None
-
 if __name__ == '__main__':
     from_dt = datetime.datetime(2019, 3, 15, 6, 0)
     to_dt = datetime.datetime(2019, 3, 15, 9, 0)
-    range_minutes = (to_dt - from_dt).seconds / 60
+    range_minutes = int((to_dt - from_dt).seconds / 60)
     step_minutes = 15
 
     date_generated = (from_dt + datetime.timedelta(minutes=mins) for mins in

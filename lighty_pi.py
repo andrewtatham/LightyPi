@@ -3,6 +3,7 @@ import datetime
 import logging
 import platform
 import pprint
+import time
 
 import colour
 import pytz
@@ -314,6 +315,7 @@ class LightyPi(object):
 
     def _larsson_scanner(self):
         if self.blinkstick_flex:
+            self._wait_for_brightness()
             self.blinkstick_flex.larsson_scanner()
 
     def _before_morning(self):
@@ -336,7 +338,13 @@ class LightyPi(object):
 
     def _cube_job(self):
         if self._cube:
+            self._wait_for_brightness()
             self._cube.run()
+
+    def _wait_for_brightness(self):
+        while colour_helper.brightness is None:
+            print("waiting for brightness value")
+            time.sleep(1)
 
 
 if __name__ == '__main__':
