@@ -142,9 +142,6 @@ class CubeWrapper(object):
     def off(self):
         self._run = False
 
-    def set_day_factor(self, day_factor):
-        self._brightness = int(8 + 64 * day_factor)
-
 
 def get():
     n = 5
@@ -174,5 +171,6 @@ def get():
 
 
 if __name__ == '__main__':
+    colour_helper.set_day_factor(1.0)
     cube_wrapper = get()
     cube_wrapper.run(2)
