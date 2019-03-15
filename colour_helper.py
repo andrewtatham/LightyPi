@@ -56,7 +56,6 @@ def set_day_factor(_day_factor):
 
 day_factor = None
 brightness = None
-set_day_factor(1.0)
 
 if __name__ == '__main__':
     from_dt = datetime.datetime(2019, 3, 15, 6, 0)

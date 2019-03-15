@@ -6,6 +6,14 @@ import colour_helper
 
 class ColourHelperTestCase(unittest.TestCase):
 
+    def test_get_random_hsv(self):
+        hsv = colour_helper.get_random_hsv()
+        print(hsv)
+
+    def test_get_random_rgb(self):
+        rgb = colour_helper.get_random_rgb()
+        print(rgb)
+
     def test_get_day_factor_increasing(self):
         from_dt = datetime.datetime(2019, 3, 15, 6, 00)
         to_dt = datetime.datetime(2019, 3, 15, 9, 00)

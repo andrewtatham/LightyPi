@@ -65,7 +65,6 @@ class LightyPi(object):
         self.scheduler = BlockingScheduler()
         self.is_linux = platform.platform().startswith('Linux')
         self._initialize()
-        self.day_factor = 1.0
 
     def _initialize(self):
         self._init_logging()
