@@ -22,50 +22,17 @@ class CubeWrapper(object):
         self._cube_instance = cube_instance
         self._run = True
         self._is_viz = is_viz
-        self._brightness = 64
+
 
     def _hello(self):
-        b = self._brightness
+        b = colour_helper.brightness
         self._set_all_rgb((b, 0, 0), "x")
-        self._sleep(2)
+        self._sleep(0.1)
         self._set_all_rgb((0, b, 0), "y")
-        self._sleep(2)
+        self._sleep(0.1)
         self._set_all_rgb((0, 0, b), "z")
-        self._sleep(2)
+        self._sleep(0.1)
         self._off()
-
-    def _rgb_cube(self):
-        bright = self._brightness
-        for x in range(self.n):
-            for y in range(self.n):
-                for z in range(self.n):
-                    r = int(x * bright / self.n)
-                    g = int(y * bright / self.n)
-                    b = int(z * bright / self.n)
-                    self._cube_instance.set_rgb((x, y, z), (r, g, b))
-        self._cube_instance.show()
-
-    def _hsv_cube(self):
-        for x in range(self.n):
-            for y in range(self.n):
-                for z in range(self.n):
-                    h = 1.0 * x / self.n
-                    s = 1.0 * y / self.n
-                    v = self._brightness * z / self.n
-                    rgb = colour_helper.hsv_to_rgb((h, s, v))
-                    self._cube_instance.set_rgb((x, y, z), rgb)
-        self._cube_instance.show()
-
-    def _rainbow_cube(self):
-        s = 1.0
-        v = self._brightness
-        for x in range(self.n):
-            h = 1.0 * x / self.n
-            for y in range(self.n):
-                for z in range(self.n):
-                    rgb = colour_helper.hsv_to_rgb((h, s, v))
-                    self._cube_instance.set_rgb((x, y, z), rgb)
-        self._cube_instance.show()
 
     def _off(self):
         self._set_all_rgb((0, 0, 0))

@@ -259,6 +259,22 @@ class LightyPi(object):
         self.scheduler.add_job(func=self._during_sunset, trigger=during_sunset)
         self.scheduler.add_job(func=self._at_dusk, trigger=at_dusk)
 
+        now = datetime.datetime.now(tz)
+        if now <= self.dawn:
+            day_factor = 0.0
+        elif self.dawn < now <= self.sunrise:
+            day_factor = colour_helper.get_day_factor(self.dawn, now, self.sunrise, True)
+        elif self.sunrise < now <= self.sunset:
+            day_factor = 1.0
+        elif self.sunset < now <= self.dusk:
+            day_factor = colour_helper.get_day_factor(self.sunset, now, self.dusk, False)
+        elif now < self.dusk:
+            day_factor = 0.0
+        else:
+            day_factor = 0.25
+
+        self._set_day_factor(day_factor)
+
     def _at_dawn(self):
         day_factor = 0.0
         self._set_day_factor(day_factor)

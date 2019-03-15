@@ -34,13 +34,19 @@ def hsv_to_rgb(hsv):
 
 
 def get_day_factor(from_dt, now_dt, to_dt, increasing):
-    x = now_dt - from_dt
-    y = to_dt - from_dt
-    day_factor = x.total_seconds() / y.total_seconds()
-    if increasing:
-        return day_factor
+
+    if increasing and now_dt >= to_dt or not increasing and now_dt <= from_dt:
+        return 1.0
+    elif increasing and now_dt <= from_dt or not increasing and now_dt >= to_dt:
+        return 0.0
     else:
-        return 1.0 - day_factor
+        x = now_dt - from_dt
+        y = to_dt - from_dt
+        day_factor = x.total_seconds() / y.total_seconds()
+        if increasing:
+            return day_factor
+        else:
+            return 1.0 - day_factor
 
 
 def set_day_factor(_day_factor):
@@ -59,7 +65,7 @@ if __name__ == '__main__':
     range_minutes = (to_dt - from_dt).seconds / 60
     step_minutes = 15
 
-    date_generated = (from_dt + datetime.timedelta(minutes=mins) for mins in range(0, range_minutes + 1, step_minutes))
+    date_generated = (from_dt + datetime.timedelta(minutes=mins) for mins in range(-30, range_minutes + 30, step_minutes))
 
     for now_dt in date_generated:
         sunrise = get_day_factor(from_dt, now_dt, to_dt, True)
