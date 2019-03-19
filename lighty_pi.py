@@ -14,6 +14,7 @@ from blinkstick import blinkstick
 
 import colour_helper
 from cube_stuff import cube_wrapper
+from unicornhat_stuff import unicornhat_wrapper
 
 try:
     import sportball
@@ -63,6 +64,7 @@ class LightyPi(object):
         self.cheer = None
         self.hue = None
         self._cube = None
+        self._unicornhat = None
         self.scheduler = BlockingScheduler()
         self.is_linux = platform.platform().startswith('Linux')
         self._initialize()
@@ -77,6 +79,7 @@ class LightyPi(object):
             # self._init_cheerlights()
             # self._init_hue()
             self._init_cube()
+            self._init_unicorn_hat()
 
     def _init_aws(self):
         self.aws = AwsClient()
@@ -120,6 +123,14 @@ class LightyPi(object):
             self._cube = cube_wrapper.get()
             if self._cube:
                 logging.info("cube")
+        except Exception as ex:
+            logging.warning(ex)
+
+    def _init_unicorn_hat(self):
+        try:
+            self._unicornhat = unicornhat_wrapper.get()
+            if self._cube:
+                logging.info("unicornhat")
         except Exception as ex:
             logging.warning(ex)
 
@@ -227,6 +238,9 @@ class LightyPi(object):
         self.scheduler.add_job(func=self._xmas, trigger=every_second)
 
     def at_midnight_get_sun_data(self):
+        self.scheduler.add_job(self._before_morning, before_morning)
+        self.scheduler.add_job(self._at_bedtime, at_bedtime)
+
         self.scheduler.add_job(func=self._get_sunset_sunrise, trigger=at_midnight)
         self.scheduler.add_job(func=self._get_sunset_sunrise)
 
@@ -308,8 +322,6 @@ class LightyPi(object):
         colour_helper.set_day_factor(day_factor)
 
     def larsson_scanner(self):
-        self.scheduler.add_job(self._before_morning, before_morning)
-        self.scheduler.add_job(self._at_bedtime, at_bedtime)
         self.scheduler.add_job(self._larsson_scanner, at_morning)
         self.scheduler.add_job(self._larsson_scanner)  # omit trigger = run at startup
 
@@ -331,8 +343,6 @@ class LightyPi(object):
         sportball.update()
 
     def cube_job(self):
-        self.scheduler.add_job(self._before_morning, before_morning)
-        self.scheduler.add_job(self._at_bedtime, at_bedtime)
         self.scheduler.add_job(self._cube_job, at_morning)
         self.scheduler.add_job(self._cube_job)  # omit trigger = run at startup
 
@@ -345,6 +355,15 @@ class LightyPi(object):
         while colour_helper.brightness is None:
             print("waiting for brightness value")
             time.sleep(1)
+
+    def unicornhat_job(self):
+        self.scheduler.add_job(self._unicornhat_job, at_morning)
+        self.scheduler.add_job(self._unicornhat_job)  # omit trigger = run at startup
+
+    def _unicornhat_job(self):
+        if self._unicornhat:
+            self._wait_for_brightness()
+            self._unicornhat.run()
 
 
 if __name__ == '__main__':
