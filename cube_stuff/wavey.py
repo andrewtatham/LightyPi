@@ -10,8 +10,7 @@ class Wave(object):
         self.cube = cube
         self.segments = [[0 for _ in range(self.cube.n)] for _ in range(self.cube.n)]
         self.t = 0
-        self._hsv = colour_helper.get_random_hsv()
-        self._h_delta = random.uniform(-0.01, 0.01)
+        self._hsv = colour_helper.get_next_colour_hsv()
         self.map_func = random.choice(list(cube_helper.bys.values()))
         self.t_phase = random.randint(-180, 180) / self.cube.n
         self.i_phase = random.randint(-180, 180) / self.cube.n
@@ -27,7 +26,7 @@ class Wave(object):
 
     def update(self):
         self.t += 1
-        self._hsv = colour_helper.h_delta(self._hsv, self._h_delta)
+        self._hsv = colour_helper.get_next_colour_hsv(self._hsv)
         for i in range(self.cube.n):
             for j in range(self.cube.n):
                 degrees = (self.t * self.t_phase + i * self.i_phase + j * self.j_phase) % 360
@@ -39,11 +38,10 @@ class Wave(object):
                 self.segments[i][j] = k
 
     def draw(self):
-        hsv = self._hsv
         for i in range(self.cube.n):
             for j in range(self.cube.n):
-                hsv = colour_helper.h_delta(hsv, self._h_delta)
-                rgb = colour_helper.hsv_to_rgb(hsv)
+                self._hsv = colour_helper.get_next_colour_hsv(self._hsv)
+                rgb = colour_helper.hsv_to_rgb(self._hsv)
                 k = self.segments[i][j]
                 xyz = self.map_func((i, j, k))
                 self.cube.set_rgb(xyz, rgb)

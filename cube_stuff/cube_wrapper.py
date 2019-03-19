@@ -106,6 +106,8 @@ class CubeWrapper(object):
                 self._sleep_off_sleep(on_secs, off_secs)
 
             while self._run:
+                colour_helper.next_theme()
+
                 # if not self._is_viz:
                 # self._rgb_cube()
                 # self._sleep_off_sleep(on_secs, off_secs)

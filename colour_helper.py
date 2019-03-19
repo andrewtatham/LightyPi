@@ -1,10 +1,30 @@
 import colorsys
 import datetime
+import itertools
 import random
 
 rgb_black = (0, 0, 0)
 day_factor = 1.0
 brightness = 255
+
+
+
+
+
+def red():
+    return (0.0, 1.0, brightness)
+
+
+def blue():
+    return (1.0 / 3.0, 1.0, brightness)
+
+
+def green():
+    return (2.0 / 3.0, 1.0, brightness)
+
+
+def white():
+    return (0.0, 0.0, brightness)
 
 
 def get_random_hsv():
@@ -64,6 +84,72 @@ def set_day_factor(_day_factor):
     global day_factor, brightness
     day_factor = _limit(0.0, _day_factor, 1.0)
     brightness = _limit(0, int(8 + 64 * day_factor), 255)
+
+
+class ColourTheme(object):
+    def get_next_colour_hsv(self):
+        pass
+
+
+class ColourLoop(ColourTheme):
+    def __init__(self, colours):
+        self._colours = itertools.cycle(colours)
+
+    def get_next_colour_hsv(self, hsv=None):
+        next_colour = next(self._colours)
+        return next_colour()
+
+
+class RedGreenBlue(ColourLoop):
+    def __init__(self):
+        super(RedGreenBlue, self).__init__([
+            red,
+            green,
+            blue
+        ])
+
+
+class RedWhiteBlue(ColourLoop):
+    def __init__(self):
+        super(RedWhiteBlue, self).__init__([
+            red,
+            white,
+            blue
+        ])
+
+
+class Rainbow(ColourTheme):
+    def __init__(self):
+        self._hsv_delta = None
+        while not self._hsv_delta:
+            self._hsv_delta = random.uniform(-0.05, 0.05)
+
+    def get_next_colour_hsv(self, hsv=None):
+        if hsv:
+            return h_delta(hsv, self._hsv_delta)
+        else:
+            return get_random_hsv()
+
+
+themes = itertools.cycle([
+    RedGreenBlue(),
+    RedWhiteBlue(),
+    Rainbow()
+])
+
+current_theme = None
+
+
+def next_theme():
+    global current_theme
+    current_theme = next(themes)
+
+
+next_theme()
+
+
+def get_next_colour_hsv(hsv=None):
+    return current_theme.get_next_colour_hsv(hsv)
 
 
 if __name__ == '__main__':

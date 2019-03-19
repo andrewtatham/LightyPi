@@ -26,14 +26,13 @@ class Star(object):
 class StarFactory(object):
     def __init__(self, cube):
         self.cube = cube
-        self.hsv = colour_helper.get_random_hsv()
-        self.hsv_delta = random.uniform(-0.05, 0.05)
+        self.hsv = colour_helper.get_next_colour_hsv()
         direction = random.choice("xyz") + random.choice("+-")
         self.direction_func = cube_helper.direction_funcs[direction]
         self.start_position_func = cube_helper.edge_start_position_funcs[direction]
 
     def create(self):
-        self.hsv = colour_helper.h_delta(self.hsv, self.hsv_delta)
+        self.hsv = colour_helper.get_next_colour_hsv(self.hsv)
         rgb = colour_helper.hsv_to_rgb(self.hsv)
         xyz = self.start_position_func(self.cube.n)
         star = Star(xyz, rgb, self.direction_func, self.cube)
