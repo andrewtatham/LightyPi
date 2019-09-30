@@ -12,20 +12,20 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 from blinkstick import blinkstick
 
-import colour_helper
+from colour import colour_helper
 from cube_stuff import cube_wrapper
 
 try:
-    import sportball
+    from misc import sportball
 except IOError as ex:
     print(ex)
 
 import piglow_wrapper
-from aws_wrapper import AwsClient, AwsIotButtonEvent
-from blinkstick_flex_wrapper import BlinkstickFlexWrapper
-from blinkstick_nano_wrapper import BlinkstickNanoWrapper
-from cheerlights_wrapper import CheerlightsWrapper
-from phillips_hue_wrapper import HueWrapper
+from aws.aws_wrapper import AwsClient, AwsIotButtonEvent
+from blinkstick.blinkstick_flex_wrapper import BlinkstickFlexWrapper
+from blinkstick.blinkstick_nano_wrapper import BlinkstickNanoWrapper
+from cheerlights.cheerlights_wrapper import CheerlightsWrapper
+from hue.phillips_hue_wrapper import HueWrapper
 from astral import Astral
 
 

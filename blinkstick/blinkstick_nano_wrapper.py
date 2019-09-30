@@ -1,4 +1,4 @@
-from blinkstick_helper import BlinkstickHelper
+from blinkstick.blinkstick_helper import BlinkstickHelper
 
 
 class BlinkstickNanoWrapper(BlinkstickHelper):

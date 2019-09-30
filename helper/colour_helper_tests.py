@@ -1,7 +1,7 @@
 import datetime
 import unittest
 
-import colour_helper
+from colour import colour_helper
 
 
 class ColourHelperTestCase(unittest.TestCase):

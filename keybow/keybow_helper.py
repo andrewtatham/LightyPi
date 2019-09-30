@@ -1,4 +1,4 @@
-import colour_helper
+from helper import colour_helper
 
 if __name__ == '__main__':
 

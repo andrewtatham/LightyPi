@@ -10,10 +10,10 @@ import feedparser
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 
-from blinkstick_flex_wrapper import BlinkstickFlexWrapper
-from blinkstick_nano_wrapper import BlinkstickNanoWrapper
-from phillips_hue_wrapper import HueWrapper
-from scrollhat_wrapper import ScrollHatWrapper
+from blinkstick.blinkstick_flex_wrapper import BlinkstickFlexWrapper
+from blinkstick.blinkstick_nano_wrapper import BlinkstickNanoWrapper
+from hue.phillips_hue_wrapper import HueWrapper
+from scrollhat.scrollhat_wrapper import ScrollHatWrapper
 import logging
 logging.basicConfig()
 

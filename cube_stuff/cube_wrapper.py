@@ -1,7 +1,7 @@
 import logging
 import platform
 
-import colour_helper
+from colour import colour_helper
 from cube_stuff import cube_helper
 from cube_stuff.bouncy_ball import BouncyBalls
 from cube_stuff.starfield import StarField
