@@ -55,7 +55,7 @@ def hsv_to_rgb(hsv):
     r = int(rgb[0])
     g = int(rgb[1])
     b = int(rgb[2])
-    # print('hsv_to_rgb: h {} s {} v {} => r {} g {} b {}'.format(h, s, v, r, g, b))
+    print('hsv_to_rgb: h {} s {} v {} => r {} g {} b {}'.format(h, s, v, r, g, b))
     return r, g, b
 
 
@@ -84,6 +84,7 @@ def set_day_factor(_day_factor):
     global day_factor, brightness
     day_factor = _limit(0.0, _day_factor, 1.0)
     brightness = _limit(0, int(8 + 64 * day_factor), 255)
+    print('brightness: {}'.format(brightness))
 
 
 class ColourTheme(object):
@@ -165,3 +166,5 @@ if __name__ == '__main__':
         sunrise = get_day_factor(from_dt, now_dt, to_dt, True)
         sunset = get_day_factor(from_dt, now_dt, to_dt, False)
         print("{} {} {}".format(now_dt, sunrise, sunset))
+        set_day_factor(sunrise)
+        set_day_factor(sunset)
