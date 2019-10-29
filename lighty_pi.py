@@ -12,18 +12,22 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 from blinkstick import blinkstick
 
-from colour import colour_helper
+from helper import colour_helper, ping_helper
 from cube_stuff import cube_wrapper
 
 try:
     from misc import sportball
-except IOError as ex:
+except Exception as ex:
     print(ex)
 
 import piglow_wrapper
 from aws.aws_wrapper import AwsClient, AwsIotButtonEvent
-from blinkstick.blinkstick_flex_wrapper import BlinkstickFlexWrapper
-from blinkstick.blinkstick_nano_wrapper import BlinkstickNanoWrapper
+
+try:
+    from blinksticks.blinkstick_flex_wrapper import BlinkstickFlexWrapper
+    from blinksticks.blinkstick_nano_wrapper import BlinkstickNanoWrapper
+except Exception as ex:
+    print(ex)
 from cheerlights.cheerlights_wrapper import CheerlightsWrapper
 from hue.phillips_hue_wrapper import HueWrapper
 from astral import Astral
@@ -45,6 +49,8 @@ before_morning = CronTrigger(hour=5, minute=59)
 at_morning = CronTrigger(hour=6)
 at_bedtime = CronTrigger(hour=23)
 every_fifteen_minutes = CronTrigger(minute="*/15")
+every_five_minutes = CronTrigger(minute="*/5")
+every_minute = CronTrigger(minute="*")
 
 tz = pytz.timezone("Europe/London")
 
@@ -74,8 +80,8 @@ class LightyPi(object):
         if self.is_linux:
             self._init_piglow()
             # self._init_aws()
-            # self._init_cheerlights()
-            # self._init_hue()
+            self._init_cheerlights()
+            self._init_hue()
             self._init_cube()
 
     def _init_aws(self):
@@ -308,8 +314,6 @@ class LightyPi(object):
         colour_helper.set_day_factor(day_factor)
 
     def larsson_scanner(self):
-        self.scheduler.add_job(self._before_morning, before_morning)
-        self.scheduler.add_job(self._at_bedtime, at_bedtime)
         self.scheduler.add_job(self._larsson_scanner, at_morning)
         self.scheduler.add_job(self._larsson_scanner)  # omit trigger = run at startup
 
@@ -318,12 +322,6 @@ class LightyPi(object):
             self._wait_for_brightness()
             self.blinkstick_flex.larsson_scanner()
 
-    def _before_morning(self):
-        self.lights_on()
-
-    def _at_bedtime(self):
-        self.lights_off()
-
     def sportball(self):
         self.scheduler.add_job(self._sportball, every_fifteen_minutes)
 
@@ -331,8 +329,6 @@ class LightyPi(object):
         sportball.update()
 
     def cube_job(self):
-        self.scheduler.add_job(self._before_morning, before_morning)
-        self.scheduler.add_job(self._at_bedtime, at_bedtime)
         self.scheduler.add_job(self._cube_job, at_morning)
         self.scheduler.add_job(self._cube_job)  # omit trigger = run at startup
 
@@ -346,15 +342,36 @@ class LightyPi(object):
             print("waiting for brightness value")
             time.sleep(1)
 
+    def ping_andrewdesktop(self):
+        self.scheduler.add_job(func=self._ping_andrewdesktop, trigger=every_fifteen_minutes)
+        self.scheduler.add_job(func=self._ping_andrewdesktop)
+
+    def _ping_andrewdesktop(self):
+        andrewdesktop_is_up = ping_helper.ping_andrewdesktop()
+        if andrewdesktop_is_up and not colour_helper.is_on:
+            print("andrewdesktop switched on")
+            self.lights_on()
+        elif not andrewdesktop_is_up and colour_helper.is_on:
+            print("andrewdesktop switched off")
+            self.lights_off()
+        colour_helper.is_on = andrewdesktop_is_up
+
+    def hue_colour_loop(self):
+        self.scheduler.add_job(func=self._hue_colour_loop, trigger=every_minute)
+        self.scheduler.add_job(func=self._hue_colour_loop)
+
+    def _hue_colour_loop(self):
+        if self.hue:
+            self._wait_for_brightness()
+            self.hue.random_colour()
+
 
 if __name__ == '__main__':
     pi = LightyPi()
+    pi.ping_andrewdesktop()
     pi.at_midnight_get_sun_data()
-
     pi.larsson_scanner()
-
-    pi.sportball()
-
+    pi.hue_colour_loop()
     try:
         pi.run()
     except KeyboardInterrupt:

@@ -1,7 +1,7 @@
 import operator
 import random
 
-from colour import colour_helper
+from helper import colour_helper
 from cube_stuff import cube_helper
 
 

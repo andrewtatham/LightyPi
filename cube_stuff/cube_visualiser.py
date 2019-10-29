@@ -85,6 +85,7 @@ class CubeVisualizer(CubeBase):
     def callback(self):
         run = True
         while run:
+            # noinspection PyBroadException
             try:
                 for path in self.paths:
                     print(path)

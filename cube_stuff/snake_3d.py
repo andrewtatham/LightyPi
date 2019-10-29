@@ -1,6 +1,6 @@
 import random
 
-from colour import colour_helper
+from helper import colour_helper
 from cube_wrapper import cube_helper
 
 

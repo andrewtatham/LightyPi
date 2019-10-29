@@ -10,8 +10,8 @@ import feedparser
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 
-from blinkstick.blinkstick_flex_wrapper import BlinkstickFlexWrapper
-from blinkstick.blinkstick_nano_wrapper import BlinkstickNanoWrapper
+from blinksticks.blinkstick_flex_wrapper import BlinkstickFlexWrapper
+from blinksticks.blinkstick_nano_wrapper import BlinkstickNanoWrapper
 from hue.phillips_hue_wrapper import HueWrapper
 from scrollhat.scrollhat_wrapper import ScrollHatWrapper
 import logging
@@ -202,6 +202,7 @@ class AllTheThings(Rule):
 def update():
     # hack to prevent bozo errors
     if hasattr(ssl, '_create_unverified_context'):
+        # noinspection PyProtectedMember
         ssl._create_default_https_context = ssl._create_unverified_context
     print("Updating {}".format(datetime.datetime.now()))
     feed = feedparser.parse(feed_url)

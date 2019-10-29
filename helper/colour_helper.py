@@ -6,25 +6,23 @@ import random
 rgb_black = (0, 0, 0)
 day_factor = 1.0
 brightness = 255
-
-
-
+is_on = True
 
 
 def red():
-    return (0.0, 1.0, brightness)
+    return 0.0, 1.0, brightness
 
 
 def blue():
-    return (1.0 / 3.0, 1.0, brightness)
+    return 1.0 / 3.0, 1.0, brightness
 
 
 def green():
-    return (2.0 / 3.0, 1.0, brightness)
+    return 2.0 / 3.0, 1.0, brightness
 
 
 def white():
-    return (0.0, 0.0, brightness)
+    return 0.0, 0.0, brightness
 
 
 def get_random_hsv():
@@ -39,9 +37,9 @@ def get_random_rgb():
     return hsv_to_rgb(get_random_hsv())
 
 
-def h_delta(hsv, h_delta):
+def h_delta(hsv, hue_delta):
     h, s, v = hsv
-    h = (h + h_delta) % 1.0
+    h = (h + hue_delta) % 1.0
     # print('h_delta: h {} s {} v {}'.format(h, s, v))
     return h, s, v
 

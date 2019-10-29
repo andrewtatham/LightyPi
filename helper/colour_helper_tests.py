@@ -1,7 +1,7 @@
 import datetime
 import unittest
 
-from colour import colour_helper
+from helper import colour_helper
 
 
 class ColourHelperTestCase(unittest.TestCase):
@@ -9,15 +9,18 @@ class ColourHelperTestCase(unittest.TestCase):
     def setUp(self):
         colour_helper.set_day_factor(0.75)
 
-    def test_get_random_hsv(self):
+    @staticmethod
+    def test_get_random_hsv():
         hsv = colour_helper.get_random_hsv()
         print(hsv)
 
-    def test_get_random_rgb(self):
+    @staticmethod
+    def test_get_random_rgb():
         rgb = colour_helper.get_random_rgb()
         print(rgb)
 
-    def test_h_delta(self):
+    @staticmethod
+    def test_h_delta():
         hsv = colour_helper.get_random_hsv()
         for _ in range(100):
             hsv = colour_helper.h_delta(hsv, 0.1)

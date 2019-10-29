@@ -1,7 +1,7 @@
 import logging
 import platform
 
-from colour import colour_helper
+from helper import colour_helper
 from cube_stuff import cube_helper
 from cube_stuff.bouncy_ball import BouncyBalls
 from cube_stuff.starfield import StarField
@@ -22,7 +22,6 @@ class CubeWrapper(object):
         self._cube_instance = cube_instance
         self._run = True
         self._is_viz = is_viz
-
 
     def _hello(self):
         b = colour_helper.brightness

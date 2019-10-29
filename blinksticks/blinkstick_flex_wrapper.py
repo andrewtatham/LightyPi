@@ -1,7 +1,8 @@
 import time
 
-from colour import colour_helper
-from blinkstick.blinkstick_helper import BlinkstickHelper
+from blinkstick_helper import BlinkstickHelper
+
+
 
 
 def h_delta(h, delta):
@@ -49,7 +50,7 @@ class LarssonScanner(object):
 
 
 class BlinkstickFlexWrapper(BlinkstickHelper):
-    def __init__(self, led_count=32, serial="BS006639-3.1"):
+    def __init__(self, led_count=32, serial='BS006639-3.1'):
         BlinkstickHelper.__init__(self, led_count, serial)
         self._larsson_scanner = LarssonScanner(self)
 
