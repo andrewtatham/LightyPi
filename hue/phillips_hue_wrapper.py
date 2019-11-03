@@ -62,7 +62,7 @@ class HueWrapper(object):
 
     def hue(self, hue, sat):
         # hue' parameter has the range 0-65535 so represents approximately 182*degrees
-        # sat is 0-255?
+        # sat is 0-254?
         for light in self.lights:
             light.hue = hue
             light.sat = sat
@@ -128,6 +128,12 @@ class HueWrapper(object):
 
     def sleep(self, seconds):
         time.sleep(seconds)
+
+    def do_whatever(self):
+        self.colour_loop_off()
+        self.random_colour()
+        # for light in self.lights:
+        #     light.
 
 
 if __name__ == '__main__':

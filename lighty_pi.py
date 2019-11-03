@@ -76,12 +76,12 @@ class LightyPi(object):
     def _initialize(self):
         self._init_logging()
         self._init_blinksticks()
+        self._init_hue()
 
         if self.is_linux:
             self._init_piglow()
             # self._init_aws()
             self._init_cheerlights()
-            self._init_hue()
             self._init_cube()
 
     def _init_aws(self):
@@ -363,7 +363,7 @@ class LightyPi(object):
     def _hue_colour_loop(self):
         if self.hue:
             self._wait_for_brightness()
-            self.hue.random_colour()
+            self.hue.do_whatever()
 
 
 if __name__ == '__main__':
