@@ -12,7 +12,8 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 from blinkstick import blinkstick
 
-from helper import colour_helper, ping_helper
+import helper.colour_helper
+import helper.ping_helper
 from cube_stuff import cube_wrapper
 
 try:
@@ -269,11 +270,11 @@ class LightyPi(object):
         if now <= self.dawn:
             day_factor = 0.0
         elif self.dawn < now <= self.sunrise:
-            day_factor = colour_helper.get_day_factor(self.dawn, now, self.sunrise, True)
+            day_factor = helper.colour_helper.get_day_factor(self.dawn, now, self.sunrise, True)
         elif self.sunrise < now <= self.sunset:
             day_factor = 1.0
         elif self.sunset < now <= self.dusk:
-            day_factor = colour_helper.get_day_factor(self.sunset, now, self.dusk, False)
+            day_factor = helper.colour_helper.get_day_factor(self.sunset, now, self.dusk, False)
         elif now < self.dusk:
             day_factor = 0.0
         else:
@@ -302,16 +303,16 @@ class LightyPi(object):
         logging.info('dusk')
 
     def _during_sunrise(self):
-        day_factor = colour_helper.get_day_factor(self.dawn, datetime.datetime.now(tz), self.sunrise, True)
+        day_factor = helper.colour_helper.get_day_factor(self.dawn, datetime.datetime.now(tz), self.sunrise, True)
         self._set_day_factor(day_factor)
 
     def _during_sunset(self):
-        day_factor = colour_helper.get_day_factor(self.sunset, datetime.datetime.now(tz), self.dusk, False)
+        day_factor = helper.colour_helper.get_day_factor(self.sunset, datetime.datetime.now(tz), self.dusk, False)
         self._set_day_factor(day_factor)
 
     def _set_day_factor(self, day_factor):
         logging.info('day factor: {}'.format(day_factor))
-        colour_helper.set_day_factor(day_factor)
+        helper.colour_helper.set_day_factor(day_factor)
 
     def larsson_scanner(self):
         self.scheduler.add_job(self._larsson_scanner, at_morning)
@@ -338,7 +339,7 @@ class LightyPi(object):
             self._cube.run()
 
     def _wait_for_brightness(self):
-        while colour_helper.brightness is None:
+        while helper.colour_helper.brightness is None:
             print("waiting for brightness value")
             time.sleep(1)
 
@@ -347,14 +348,14 @@ class LightyPi(object):
         self.scheduler.add_job(func=self._ping_andrewdesktop)
 
     def _ping_andrewdesktop(self):
-        andrewdesktop_is_up = ping_helper.ping_andrewdesktop()
-        if andrewdesktop_is_up and not colour_helper.is_on:
+        andrewdesktop_is_up = helper.ping_helper.ping_andrewdesktop()
+        if andrewdesktop_is_up and not helper.colour_helper.is_on:
             print("andrewdesktop switched on")
             self.lights_on()
-        elif not andrewdesktop_is_up and colour_helper.is_on:
+        elif not andrewdesktop_is_up and helper.colour_helper.is_on:
             print("andrewdesktop switched off")
             self.lights_off()
-        colour_helper.is_on = andrewdesktop_is_up
+        helper.colour_helper.is_on = andrewdesktop_is_up
 
     def hue_colour_loop(self):
         self.scheduler.add_job(func=self._hue_colour_loop, trigger=every_minute)
