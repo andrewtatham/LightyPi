@@ -115,8 +115,6 @@ class HueWrapper(object):
         v = int(v * 255)
         print((h, s, v))
         for light in self.lights:
-            if self.is_off:
-                self.on()
             if light.is_colour:
                 light.hue = h
                 light.sat = s
