@@ -15,4 +15,3 @@ paho-mqtt
 Astral
 rpi_ws281x
 piglow
-python3-piglow
