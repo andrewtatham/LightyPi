@@ -1,8 +1,7 @@
 import time
 
-from blinkstick_helper import BlinkstickHelper
-
-
+from blinksticks.blinkstick_helper import BlinkstickHelper
+from helper import colour_helper
 
 
 def h_delta(h, delta):
