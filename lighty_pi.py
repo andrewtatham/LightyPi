@@ -358,9 +358,9 @@ class LightyPi(object):
         helper.colour_helper.is_on = andrewdesktop_is_up
 
     def hue_colour_loop(self):
+        self.scheduler.add_job(func=self._hue_next_profile, trigger=every_fifteen_minutes)
         self.scheduler.add_job(func=self._hue_do_whatever, trigger=every_minute)
         self.scheduler.add_job(func=self._hue_do_whatever)
-        self.scheduler.add_job(func=self._hue_next_profile, trigger=every_fifteen_minutes)
 
     def _hue_do_whatever(self):
         if self.hue:
@@ -370,6 +370,7 @@ class LightyPi(object):
     def _hue_next_profile(self):
         if self.hue:
             self.hue.next_profile()
+
 
 if __name__ == '__main__':
     pi = LightyPi()
