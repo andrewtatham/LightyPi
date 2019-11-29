@@ -22,35 +22,37 @@ class HueWrapper(object):
                 {'name': 'Left White Strip', 'is_colour': False},
             ]
         if not profiles:
+            normal_mode = {
+                'name': 'normal',
+                'profile_state': {},
+                'lights': {
+                    'Hue color spot 1': {'is_on': False, 'light_state': {}, 'func': None},
+                    'Hue color spot 2': {'is_on': False, 'light_state': {}, 'func': None},
+                    'Hue color spot 3': {'is_on': False, 'light_state': {}, 'func': None},
+                    'DEATH STAR': {'is_on': False, 'light_state': {}, 'func': None},
+                    'Right Colour Strip': {'is_on': False, 'light_state': {}, 'func': None},
+                    'Right White Strip': {'is_on': True, 'light_state': {}, 'func': self._normal_func},
+                    'Left Colour Strip': {'is_on': False, 'light_state': {}, 'func': None},
+                    'Left White Strip': {'is_on': True, 'light_state': {}, 'func': self._normal_func},
+                }
+            }
+            colour_mode = {
+                'name': 'colour',
+                'profile_state': {},
+                'lights': {
+                    'Hue color spot 1': {'is_on': True, 'light_state': {}, 'func': self._colour_func},
+                    'Hue color spot 2': {'is_on': True, 'light_state': {}, 'func': self._colour_func},
+                    'Hue color spot 3': {'is_on': True, 'light_state': {}, 'func': self._colour_func},
+                    'DEATH STAR': {'is_on': True, 'light_state': {}, 'func': self._colour_func},
+                    'Right Colour Strip': {'is_on': True, 'light_state': {}, 'func': self._colour_func},
+                    'Right White Strip': {'is_on': False, 'light_state': {}, 'func': None},
+                    'Left Colour Strip': {'is_on': True, 'light_state': {}, 'func': self._colour_func},
+                    'Left White Strip': {'is_on': False, 'light_state': {}, 'func': None},
+                }
+            }
             profiles = [
-                {
-                    'name': 'normal',
-                    'profile_state': {},
-                    'lights': {
-                        'Hue color spot 1': {'is_on': False, 'light_state': {}, 'func': None},
-                        'Hue color spot 2': {'is_on': False, 'light_state': {}, 'func': None},
-                        'Hue color spot 3': {'is_on': False, 'light_state': {}, 'func': None},
-                        'DEATH STAR': {'is_on': True, 'light_state': {}, 'func': self._normal_func},
-                        'Right Colour Strip': {'is_on': False, 'light_state': {}, 'func': None},
-                        'Right White Strip': {'is_on': True, 'light_state': {}, 'func': self._normal_func},
-                        'Left Colour Strip': {'is_on': False, 'light_state': {}, 'func': None},
-                        'Left White Strip': {'is_on': True, 'light_state': {}, 'func': self._normal_func},
-                    }
-                },
-                {
-                    'name': 'colour',
-                    'profile_state': {},
-                    'lights': {
-                        'Hue color spot 1': {'is_on': True, 'light_state': {}, 'func': self._colour_func},
-                        'Hue color spot 2': {'is_on': True, 'light_state': {}, 'func': self._colour_func},
-                        'Hue color spot 3': {'is_on': True, 'light_state': {}, 'func': self._colour_func},
-                        'DEATH STAR': {'is_on': True, 'light_state': {}, 'func': self._colour_func},
-                        'Right Colour Strip': {'is_on': True, 'light_state': {}, 'func': self._colour_func},
-                        'Right White Strip': {'is_on': False, 'light_state': {}, 'func': None},
-                        'Left Colour Strip': {'is_on': True, 'light_state': {}, 'func': self._colour_func},
-                        'Left White Strip': {'is_on': False, 'light_state': {}, 'func': None},
-                    }
-                },
+                normal_mode,
+                # colour_mode,
             ]
 
         self.light_configs = light_configs
