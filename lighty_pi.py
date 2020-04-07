@@ -374,7 +374,7 @@ class LightyPi(object):
 
 if __name__ == '__main__':
     pi = LightyPi()
-    pi.ping_andrewdesktop()
+    # pi.ping_andrewdesktop()
     pi.at_midnight_get_sun_data()
     pi.larsson_scanner()
     pi.hue_colour_loop()
